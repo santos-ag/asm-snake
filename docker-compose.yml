@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  riscv:
+    build: .
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./work:/work
+
