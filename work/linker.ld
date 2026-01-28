@@ -2,17 +2,22 @@ ENTRY(_start)
 
 MEMORY
 {
-  ROM (rx)  : ORIGIN = 0x00000000, LENGTH = 256K
-  RAM (rwx) : ORIGIN = 0x20000000, LENGTH = 64K
+    RAM (rwx) : ORIGIN = 0x0000, LENGTH = 0x00010000
 }
 
 SECTIONS
 {
-  .text : {
-    *(.text*)
-    *(.rodata*)
-  } > ROM
+    . = ORIGIN(RAM);
 
-  _stack_top = ORIGIN(RAM) + LENGTH(RAM);
+    .text :
+    {
+        *(.text*)
+    } > RAM
+
+    /* primeiro endereço livre imediatamente após .text */
+    _ram_base = .;
+
+    . = ALIGN(4);
+    _stack_top = ORIGIN(RAM) + LENGTH(RAM);
 }
 
