@@ -7,86 +7,48 @@ Disassembly of section .text:
 00000000 <_start>:
    0:	00010117          	auipc	sp,0x10
    4:	00010113          	mv	sp,sp
-   8:	13400293          	li	t0,308
-   c:	11111337          	lui	t1,0x11111
-  10:	11130313          	add	t1,t1,273 # 11111111 <_stack_top+0x11101111>
-  14:	0062a023          	sw	t1,0(t0)
-  18:	00500313          	li	t1,5
-  1c:	00700393          	li	t2,7
-  20:	00730e33          	add	t3,t1,t2
-  24:	01c2a223          	sw	t3,4(t0)
-  28:	40638e33          	sub	t3,t2,t1
-  2c:	01c2a423          	sw	t3,8(t0)
-  30:	00231e13          	sll	t3,t1,0x2
-  34:	01c2a623          	sw	t3,12(t0)
-  38:	001e5e13          	srl	t3,t3,0x1
-  3c:	01c2a823          	sw	t3,16(t0)
-  40:	00737e33          	and	t3,t1,t2
-  44:	01c2aa23          	sw	t3,20(t0)
-  48:	00736e33          	or	t3,t1,t2
-  4c:	01c2ac23          	sw	t3,24(t0)
-  50:	00734e33          	xor	t3,t1,t2
-  54:	01c2ae23          	sw	t3,28(t0)
-  58:	00732e33          	slt	t3,t1,t2
-  5c:	03c2a023          	sw	t3,32(t0)
-  60:	0063be33          	sltu	t3,t2,t1
-  64:	03c2a223          	sw	t3,36(t0)
-  68:	00630863          	beq	t1,t1,78 <branch_ok>
-  6c:	00100e13          	li	t3,1
-  70:	03c2a423          	sw	t3,40(t0)
-  74:	02c0006f          	j	a0 <hang>
+   8:	0ac00293          	li	t0,172
+   c:	00100313          	li	t1,1
+  10:	0062a023          	sw	t1,0(t0)
+  14:	00200313          	li	t1,2
+  18:	0062a223          	sw	t1,4(t0)
+  1c:	00300313          	li	t1,3
+  20:	0062a423          	sw	t1,8(t0)
 
-00000078 <branch_ok>:
-  78:	22222e37          	lui	t3,0x22222
-  7c:	222e0e13          	add	t3,t3,546 # 22222222 <_stack_top+0x22212222>
-  80:	03c2a423          	sw	t3,40(t0)
-  84:	020000ef          	jal	a4 <func>
-  88:	02a2a623          	sw	a0,44(t0)
-  8c:	0002ae03          	lw	t3,0(t0)
-  90:	03c2a823          	sw	t3,48(t0)
-  94:	cafece37          	lui	t3,0xcafec
-  98:	abee0e13          	add	t3,t3,-1346 # cafebabe <_stack_top+0xcafdbabe>
-  9c:	03c2aa23          	sw	t3,52(t0)
+00000024 <done>:
+  24:	0000006f          	j	24 <done>
 
-000000a0 <hang>:
-  a0:	0000006f          	j	a0 <hang>
-
-000000a4 <func>:
-  a4:	33333537          	lui	a0,0x33333
-  a8:	33350513          	add	a0,a0,819 # 33333333 <_stack_top+0x33323333>
-  ac:	00008067          	ret
-
-000000b0 <main>:
-  b0:	fe010113          	add	sp,sp,-32 # ffe0 <_ram_base+0xfeac>
-  b4:	00812e23          	sw	s0,28(sp)
-  b8:	02010413          	add	s0,sp,32
-  bc:	fe042623          	sw	zero,-20(s0)
-  c0:	00100793          	li	a5,1
-  c4:	fef42423          	sw	a5,-24(s0)
-  c8:	fe042023          	sw	zero,-32(s0)
-  cc:	0480006f          	j	114 <main+0x64>
-  d0:	fe042783          	lw	a5,-32(s0)
-  d4:	00279713          	sll	a4,a5,0x2
-  d8:	200007b7          	lui	a5,0x20000
-  dc:	00f707b3          	add	a5,a4,a5
-  e0:	fec42703          	lw	a4,-20(s0)
-  e4:	00e7a023          	sw	a4,0(a5) # 20000000 <_stack_top+0x1fff0000>
-  e8:	fec42703          	lw	a4,-20(s0)
-  ec:	fe842783          	lw	a5,-24(s0)
-  f0:	00f707b3          	add	a5,a4,a5
-  f4:	fef42223          	sw	a5,-28(s0)
-  f8:	fe842783          	lw	a5,-24(s0)
-  fc:	fef42623          	sw	a5,-20(s0)
- 100:	fe442783          	lw	a5,-28(s0)
- 104:	fef42423          	sw	a5,-24(s0)
- 108:	fe042783          	lw	a5,-32(s0)
- 10c:	00178793          	add	a5,a5,1
- 110:	fef42023          	sw	a5,-32(s0)
- 114:	fe042703          	lw	a4,-32(s0)
- 118:	00900793          	li	a5,9
- 11c:	fae7fae3          	bgeu	a5,a4,d0 <main+0x20>
- 120:	02d00793          	li	a5,45
- 124:	00078513          	mv	a0,a5
- 128:	01c12403          	lw	s0,28(sp)
- 12c:	02010113          	add	sp,sp,32
- 130:	00008067          	ret
+00000028 <main>:
+  28:	fe010113          	add	sp,sp,-32 # ffe0 <_ram_base+0xff34>
+  2c:	00812e23          	sw	s0,28(sp)
+  30:	02010413          	add	s0,sp,32
+  34:	fe042623          	sw	zero,-20(s0)
+  38:	00100793          	li	a5,1
+  3c:	fef42423          	sw	a5,-24(s0)
+  40:	fe042023          	sw	zero,-32(s0)
+  44:	0480006f          	j	8c <main+0x64>
+  48:	fe042783          	lw	a5,-32(s0)
+  4c:	00279713          	sll	a4,a5,0x2
+  50:	200007b7          	lui	a5,0x20000
+  54:	00f707b3          	add	a5,a4,a5
+  58:	fec42703          	lw	a4,-20(s0)
+  5c:	00e7a023          	sw	a4,0(a5) # 20000000 <_stack_top+0x1fff0000>
+  60:	fec42703          	lw	a4,-20(s0)
+  64:	fe842783          	lw	a5,-24(s0)
+  68:	00f707b3          	add	a5,a4,a5
+  6c:	fef42223          	sw	a5,-28(s0)
+  70:	fe842783          	lw	a5,-24(s0)
+  74:	fef42623          	sw	a5,-20(s0)
+  78:	fe442783          	lw	a5,-28(s0)
+  7c:	fef42423          	sw	a5,-24(s0)
+  80:	fe042783          	lw	a5,-32(s0)
+  84:	00178793          	add	a5,a5,1
+  88:	fef42023          	sw	a5,-32(s0)
+  8c:	fe042703          	lw	a4,-32(s0)
+  90:	00900793          	li	a5,9
+  94:	fae7fae3          	bgeu	a5,a4,48 <main+0x20>
+  98:	02d00793          	li	a5,45
+  9c:	00078513          	mv	a0,a5
+  a0:	01c12403          	lw	s0,28(sp)
+  a4:	02010113          	add	sp,sp,32
+  a8:	00008067          	ret
