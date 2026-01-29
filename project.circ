@@ -179,30 +179,6 @@
       <a name="label" val="imm_b"/>
       <a name="width" val="32"/>
     </comp>
-    <comp lib="0" loc="(1570,650)" name="Tunnel">
-      <a name="facing" val="east"/>
-      <a name="label" val="reset"/>
-    </comp>
-    <comp lib="0" loc="(1570,690)" name="Tunnel">
-      <a name="facing" val="east"/>
-      <a name="label" val="alu_result"/>
-      <a name="width" val="32"/>
-    </comp>
-    <comp lib="0" loc="(1570,730)" name="Tunnel">
-      <a name="facing" val="east"/>
-      <a name="label" val="ram_read_data"/>
-      <a name="width" val="32"/>
-    </comp>
-    <comp lib="0" loc="(1570,770)" name="Tunnel">
-      <a name="facing" val="east"/>
-      <a name="label" val="PC_plus_4"/>
-      <a name="width" val="32"/>
-    </comp>
-    <comp lib="0" loc="(1570,800)" name="Tunnel">
-      <a name="facing" val="east"/>
-      <a name="label" val="MemToReg"/>
-      <a name="width" val="2"/>
-    </comp>
     <comp lib="0" loc="(1590,420)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="label" val="rs1_val"/>
@@ -217,15 +193,6 @@
       <a name="facing" val="east"/>
       <a name="label" val="imm_out"/>
       <a name="width" val="32"/>
-    </comp>
-    <comp lib="0" loc="(1600,630)" name="Tunnel">
-      <a name="facing" val="south"/>
-      <a name="label" val="rd_index"/>
-      <a name="width" val="5"/>
-    </comp>
-    <comp lib="0" loc="(1620,810)" name="Tunnel">
-      <a name="facing" val="north"/>
-      <a name="label" val="RegWrite"/>
     </comp>
     <comp lib="0" loc="(1630,340)" name="Splitter">
       <a name="bit0" val="8"/>
@@ -251,6 +218,30 @@
     <comp lib="0" loc="(1630,520)" name="Tunnel">
       <a name="facing" val="north"/>
       <a name="label" val="ALUSrc"/>
+    </comp>
+    <comp lib="0" loc="(1630,740)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="reset"/>
+    </comp>
+    <comp lib="0" loc="(1630,780)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="alu_result"/>
+      <a name="width" val="32"/>
+    </comp>
+    <comp lib="0" loc="(1630,820)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="ram_read_data"/>
+      <a name="width" val="32"/>
+    </comp>
+    <comp lib="0" loc="(1630,860)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="PC_plus_4"/>
+      <a name="width" val="32"/>
+    </comp>
+    <comp lib="0" loc="(1630,890)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="MemToReg"/>
+      <a name="width" val="2"/>
     </comp>
     <comp lib="0" loc="(1650,120)" name="Tunnel">
       <a name="label" val="MemRead"/>
@@ -281,24 +272,23 @@
     <comp lib="0" loc="(1650,90)" name="Tunnel">
       <a name="label" val="RegWrite"/>
     </comp>
-    <comp lib="0" loc="(1660,630)" name="Tunnel">
+    <comp lib="0" loc="(1660,720)" name="Tunnel">
       <a name="facing" val="south"/>
-      <a name="label" val="clk"/>
+      <a name="label" val="rd_index"/>
+      <a name="width" val="5"/>
+    </comp>
+    <comp lib="0" loc="(1680,900)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="RegWrite"/>
     </comp>
     <comp lib="0" loc="(1700,520)" name="Tunnel">
       <a name="facing" val="north"/>
       <a name="label" val="ALUop"/>
       <a name="width" val="4"/>
     </comp>
-    <comp lib="0" loc="(1720,630)" name="Tunnel">
+    <comp lib="0" loc="(1720,720)" name="Tunnel">
       <a name="facing" val="south"/>
-      <a name="label" val="rs1_index"/>
-      <a name="width" val="5"/>
-    </comp>
-    <comp lib="0" loc="(1720,810)" name="Tunnel">
-      <a name="facing" val="north"/>
-      <a name="label" val="rs2_index"/>
-      <a name="width" val="5"/>
+      <a name="label" val="clk"/>
     </comp>
     <comp lib="0" loc="(1730,400)" name="Tunnel">
       <a name="label" val="alu_result"/>
@@ -310,11 +300,21 @@
     <comp lib="0" loc="(1730,460)" name="Tunnel">
       <a name="label" val="Lt"/>
     </comp>
-    <comp lib="0" loc="(1760,670)" name="Tunnel">
+    <comp lib="0" loc="(1780,720)" name="Tunnel">
+      <a name="facing" val="south"/>
+      <a name="label" val="rs1_index"/>
+      <a name="width" val="5"/>
+    </comp>
+    <comp lib="0" loc="(1780,900)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="rs2_index"/>
+      <a name="width" val="5"/>
+    </comp>
+    <comp lib="0" loc="(1820,760)" name="Tunnel">
       <a name="label" val="rs1_val"/>
       <a name="width" val="32"/>
     </comp>
-    <comp lib="0" loc="(1760,770)" name="Tunnel">
+    <comp lib="0" loc="(1820,860)" name="Tunnel">
       <a name="label" val="rs2_val"/>
       <a name="width" val="32"/>
     </comp>
@@ -511,8 +511,8 @@
     <comp lib="4" loc="(530,460)" name="ROM">
       <a name="appearance" val="logisim_evolution"/>
       <a name="contents">addr/data: 8 32
-81828237 38410113 202023 2183 203 4283 100303 200383
-300403 1483 5503 201583 6f
+a00093 700113 300193 fff00213 2082b3 40208333 3093b3 111413
+1224b3 123533 20c5b3 30d633 403256b3 20e733 20f7b3 6f
 </a>
       <a name="dataWidth" val="32"/>
     </comp>
@@ -551,7 +551,7 @@
     </comp>
     <comp loc="(1140,430)" name="DataMem"/>
     <comp loc="(1460,160)" name="ImmGen"/>
-    <comp loc="(1610,660)" name="RegFile"/>
+    <comp loc="(1670,750)" name="RegFile"/>
     <comp loc="(1680,380)" name="ALU"/>
     <comp loc="(400,440)" name="PC"/>
     <comp loc="(510,100)" name="CU"/>
@@ -570,7 +570,6 @@
     <wire from="(1460,120)" to="(1460,130)"/>
     <wire from="(1460,130)" to="(1460,160)"/>
     <wire from="(1460,130)" to="(1490,130)"/>
-    <wire from="(1530,430)" to="(1540,430)"/>
     <wire from="(910,170)" to="(990,170)"/>
     <wire from="(950,120)" to="(1010,120)"/>
     <wire from="(980,150)" to="(1010,150)"/>
