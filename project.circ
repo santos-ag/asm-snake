@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project source="3.9.0" version="1.0">
-  This file is intended to be loaded by Logisim-evolution v3.9.0(https://github.com/logisim-evolution/).
+<project source="4.0.0" version="1.0">
+  This file is intended to be loaded by Logisim-evolution v4.0.0(https://github.com/logisim-evolution/).
 
   <lib desc="#Wiring" name="0">
-    <tool name="Pin">
-      <a name="appearance" val="classic"/>
-    </tool>
     <tool name="Probe">
-      <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
+    </tool>
+    <tool name="Clock">
+      <a name="appearance" val="NewPins"/>
     </tool>
     <tool name="Constant">
       <a name="value" val="0x0"/>
@@ -52,7 +51,7 @@
     </tool>
     <tool lib="0" name="Pin">
       <a name="facing" val="west"/>
-      <a name="output" val="true"/>
+      <a name="type" val="output"/>
     </tool>
     <sep/>
     <tool lib="1" name="NOT Gate">
@@ -133,7 +132,6 @@
       <a name="width" val="3"/>
     </comp>
     <comp lib="0" loc="(1280,300)" name="Probe">
-      <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
     </comp>
     <comp lib="0" loc="(1280,440)" name="Tunnel">
@@ -163,7 +161,6 @@
       <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(1490,130)" name="Probe">
-      <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
       <a name="radix" val="16"/>
     </comp>
@@ -282,7 +279,6 @@
       <a name="width" val="3"/>
     </comp>
     <comp lib="0" loc="(1700,360)" name="Probe">
-      <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
     </comp>
     <comp lib="0" loc="(1700,520)" name="Tunnel">
@@ -654,8 +650,8 @@ e7a023 6f
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="pc_out"/>
-      <a name="output" val="true"/>
       <a name="radix" val="16"/>
+      <a name="type" val="output"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(820,390)" name="Pin">
@@ -682,8 +678,8 @@ e7a023 6f
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="pc_plus_4"/>
-      <a name="output" val="true"/>
       <a name="radix" val="16"/>
+      <a name="type" val="output"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="1" loc="(970,410)" name="AND Gate">
@@ -789,8 +785,8 @@ e7a023 6f
     <comp lib="0" loc="(580,300)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
-      <a name="output" val="true"/>
       <a name="radix" val="16"/>
+      <a name="type" val="output"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(340,240)" name="ROM">
@@ -862,8 +858,8 @@ e7a023 6f
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="type_b"/>
-      <a name="output" val="true"/>
       <a name="radix" val="16"/>
+      <a name="type" val="output"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(1060,1020)" name="Bit Extender">
@@ -874,20 +870,19 @@ e7a023 6f
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="type_i"/>
-      <a name="output" val="true"/>
       <a name="radix" val="16"/>
+      <a name="type" val="output"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(1080,960)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="type_j"/>
-      <a name="output" val="true"/>
       <a name="radix" val="16"/>
+      <a name="type" val="output"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(1200,530)" name="Pin">
-      <a name="appearance" val="classic"/>
       <a name="facing" val="north"/>
       <a name="label" val="imm_sel"/>
       <a name="width" val="3"/>
@@ -896,8 +891,8 @@ e7a023 6f
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="imm_out"/>
-      <a name="output" val="true"/>
       <a name="radix" val="16"/>
+      <a name="type" val="output"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(210,190)" name="Pin">
@@ -1413,16 +1408,16 @@ e7a023 6f
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="north"/>
       <a name="label" val="rs2_data"/>
-      <a name="output" val="true"/>
       <a name="radix" val="16"/>
+      <a name="type" val="output"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(2010,570)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="south"/>
       <a name="label" val="rs1_data"/>
-      <a name="output" val="true"/>
       <a name="radix" val="16"/>
+      <a name="type" val="output"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(2170,1530)" name="Pin">
@@ -1518,7 +1513,6 @@ e7a023 6f
       <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(680,130)" name="Probe">
-      <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
       <a name="radix" val="16"/>
     </comp>
@@ -1689,161 +1683,161 @@ e7a023 6f
     </comp>
     <comp lib="4" loc="(1020,1260)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="s9"/>
+      <a name="label" val="x25_s9"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1030,1040)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="a7"/>
+      <a name="label" val="x17_a7"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1030,610)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="ra"/>
+      <a name="label" val="x1_ra"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1030,820)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="s1"/>
+      <a name="label" val="x9_s1"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1140,1260)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="s10"/>
+      <a name="label" val="x26_s10"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1150,1040)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="s2"/>
+      <a name="label" val="x18_s2"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1150,610)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="sp"/>
+      <a name="label" val="x2_sp"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1150,820)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="a0"/>
+      <a name="label" val="x10_a0"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1260,1260)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="s11"/>
+      <a name="label" val="x27_s11"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1270,1040)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="s3"/>
+      <a name="label" val="x19_s3"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1270,610)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="gp"/>
+      <a name="label" val="x3_gp"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1270,820)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="a1"/>
+      <a name="label" val="x11_a1"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1380,1260)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="t3"/>
+      <a name="label" val="x28_t3"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1390,1040)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="s4"/>
+      <a name="label" val="x20_s4"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1390,610)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="tp"/>
+      <a name="label" val="x4_tp"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1390,820)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="a2"/>
+      <a name="label" val="x12_a2"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1500,1260)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="t4"/>
+      <a name="label" val="x29_t4"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1510,1040)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="s5"/>
+      <a name="label" val="x21_s5"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1510,610)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="t0"/>
+      <a name="label" val="x5_t0"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1510,820)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="a3"/>
+      <a name="label" val="x13_a3"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1620,1260)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="t5"/>
+      <a name="label" val="x30_t5"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1630,1040)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="s6"/>
+      <a name="label" val="x22_s6"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1630,610)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="t1"/>
+      <a name="label" val="x6_t1"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1630,820)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="a4"/>
+      <a name="label" val="x14_a4"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1740,1260)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="t6"/>
+      <a name="label" val="x31_t6"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1750,1040)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="s7"/>
+      <a name="label" val="x23_s7"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1750,610)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="t2"/>
+      <a name="label" val="x7_t2"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(1750,820)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="a5"/>
+      <a name="label" val="x15_a5"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(900,1260)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="s8"/>
+      <a name="label" val="x24_s8"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(910,1040)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="a6"/>
+      <a name="label" val="x16_a6"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(910,820)" name="Register">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="label" val="s0"/>
+      <a name="label" val="x8_s0"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="8" loc="(940,625)" name="Text">
-      <a name="text" val="zero"/>
+      <a name="text" val="x0_zero"/>
     </comp>
     <wire from="(1010,1240)" to="(1010,1290)"/>
     <wire from="(1010,1240)" to="(1130,1240)"/>
@@ -2276,7 +2270,6 @@ e7a023 6f
       <circ-port dir="out" pin="1260,500" x="190" y="180"/>
     </appear>
     <comp lib="0" loc="(1050,700)" name="Pin">
-      <a name="appearance" val="classic"/>
       <a name="facing" val="north"/>
       <a name="label" val="ALUop"/>
       <a name="width" val="4"/>
@@ -2289,20 +2282,20 @@ e7a023 6f
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="Result"/>
-      <a name="output" val="true"/>
+      <a name="type" val="output"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(1260,410)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="zero"/>
-      <a name="output" val="true"/>
+      <a name="type" val="output"/>
     </comp>
     <comp lib="0" loc="(1260,460)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="Lt"/>
-      <a name="output" val="true"/>
+      <a name="type" val="output"/>
     </comp>
     <comp lib="0" loc="(1260,460)" name="Tunnel">
       <a name="facing" val="east"/>
@@ -2312,7 +2305,7 @@ e7a023 6f
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="Ltu"/>
-      <a name="output" val="true"/>
+      <a name="type" val="output"/>
     </comp>
     <comp lib="0" loc="(1260,500)" name="Tunnel">
       <a name="facing" val="east"/>
@@ -2625,7 +2618,7 @@ e7a023 6f
     <comp lib="0" loc="(1360,390)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
-      <a name="output" val="true"/>
+      <a name="type" val="output"/>
       <a name="width" val="4"/>
     </comp>
     <comp lib="0" loc="(210,170)" name="Pin">
@@ -2700,7 +2693,6 @@ e7a023 6f
       <a name="width" val="7"/>
     </comp>
     <comp lib="0" loc="(530,190)" name="Probe">
-      <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
       <a name="radix" val="10unsigned"/>
     </comp>
@@ -2730,8 +2722,8 @@ e7a023 6f
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="control_word"/>
-      <a name="output" val="true"/>
       <a name="radix" val="16"/>
+      <a name="type" val="output"/>
       <a name="width" val="12"/>
     </comp>
     <comp lib="0" loc="(910,260)" name="Tunnel">
@@ -2848,13 +2840,13 @@ e7a023 6f
     </appear>
     <comp lib="0" loc="(1050,600)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="facing" val="west"/>
-      <a name="label" val="R"/>
-      <a name="output" val="true"/>
+      <a name="label" val="Reset"/>
     </comp>
     <comp lib="0" loc="(1050,600)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="label" val="Reset"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="R"/>
+      <a name="type" val="output"/>
     </comp>
     <comp lib="0" loc="(1090,510)" name="Tunnel">
       <a name="facing" val="east"/>
@@ -2882,33 +2874,33 @@ e7a023 6f
     </comp>
     <comp lib="0" loc="(1340,620)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="label" val="MemWrite"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="mw"/>
+      <a name="type" val="output"/>
     </comp>
     <comp lib="0" loc="(1340,620)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="facing" val="west"/>
-      <a name="label" val="mw"/>
-      <a name="output" val="true"/>
-    </comp>
-    <comp lib="0" loc="(1340,640)" name="Pin">
-      <a name="appearance" val="NewPins"/>
-      <a name="facing" val="west"/>
-      <a name="label" val="mr"/>
-      <a name="output" val="true"/>
+      <a name="label" val="MemWrite"/>
     </comp>
     <comp lib="0" loc="(1340,640)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="label" val="MemRead"/>
     </comp>
-    <comp lib="0" loc="(1340,660)" name="Pin">
+    <comp lib="0" loc="(1340,640)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="label" val="clk"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="mr"/>
+      <a name="type" val="output"/>
     </comp>
     <comp lib="0" loc="(1340,660)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="ck"/>
-      <a name="output" val="true"/>
+      <a name="type" val="output"/>
+    </comp>
+    <comp lib="0" loc="(1340,660)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="clk"/>
     </comp>
     <comp lib="0" loc="(1340,920)" name="Tunnel">
       <a name="facing" val="north"/>
@@ -2985,8 +2977,8 @@ e7a023 6f
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="raw_read_data"/>
-      <a name="output" val="true"/>
       <a name="radix" val="16"/>
+      <a name="type" val="output"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(1700,900)" name="Tunnel">
@@ -3003,7 +2995,6 @@ e7a023 6f
       <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(1750,1020)" name="Pin">
-      <a name="appearance" val="classic"/>
       <a name="facing" val="north"/>
       <a name="label" val="funct3"/>
       <a name="width" val="3"/>
@@ -3012,8 +3003,8 @@ e7a023 6f
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="read_data"/>
-      <a name="output" val="true"/>
       <a name="radix" val="16"/>
+      <a name="type" val="output"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(1780,1010)" name="Tunnel">
@@ -3120,8 +3111,8 @@ e7a023 6f
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="write_data_out"/>
-      <a name="output" val="true"/>
       <a name="radix" val="16"/>
+      <a name="type" val="output"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(910,520)" name="Pin">
@@ -3216,8 +3207,8 @@ e7a023 6f
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="addr"/>
-      <a name="output" val="true"/>
       <a name="radix" val="16"/>
+      <a name="type" val="output"/>
       <a name="width" val="8"/>
     </comp>
     <comp lib="0" loc="(970,850)" name="Tunnel">
@@ -3229,12 +3220,10 @@ e7a023 6f
       <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(990,790)" name="Probe">
-      <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
       <a name="radix" val="16"/>
     </comp>
     <comp lib="0" loc="(990,950)" name="Probe">
-      <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
       <a name="radix" val="16"/>
     </comp>
@@ -3442,8 +3431,8 @@ e7a023 6f
     <comp lib="0" loc="(730,310)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
-      <a name="output" val="true"/>
       <a name="radix" val="16"/>
+      <a name="type" val="output"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="4" loc="(490,220)" name="RAM">
