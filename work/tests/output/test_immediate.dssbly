@@ -1,0 +1,57 @@
+
+/work/tests/output/test_immediate.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <_start>:
+   0:	00010117          	auipc	sp,0x10
+   4:	00010113          	mv	sp,sp
+   8:	0b800293          	li	t0,184
+   c:	00100313          	li	t1,1
+  10:	0062a023          	sw	t1,0(t0)
+  14:	00200313          	li	t1,2
+  18:	0062a223          	sw	t1,4(t0)
+  1c:	00300313          	li	t1,3
+  20:	0062a423          	sw	t1,8(t0)
+
+00000024 <done>:
+  24:	0000006f          	j	24 <done>
+
+00000028 <main>:
+  28:	fe010113          	add	sp,sp,-32 # ffe0 <_bss_end+0xff28>
+  2c:	00812e23          	sw	s0,28(sp)
+  30:	02010413          	add	s0,sp,32
+  34:	123457b7          	lui	a5,0x12345
+  38:	fef42623          	sw	a5,-20(s0)
+  3c:	200007b7          	lui	a5,0x20000
+  40:	fec42703          	lw	a4,-20(s0)
+  44:	00e7a023          	sw	a4,0(a5) # 20000000 <_stack_top+0x1fff0000>
+  48:	deadb7b7          	lui	a5,0xdeadb
+  4c:	fef42623          	sw	a5,-20(s0)
+  50:	200007b7          	lui	a5,0x20000
+  54:	00478793          	add	a5,a5,4 # 20000004 <_stack_top+0x1fff0004>
+  58:	fec42703          	lw	a4,-20(s0)
+  5c:	00e7a023          	sw	a4,0(a5)
+  60:	123457b7          	lui	a5,0x12345
+  64:	67878793          	add	a5,a5,1656 # 12345678 <_stack_top+0x12335678>
+  68:	fef42423          	sw	a5,-24(s0)
+  6c:	200007b7          	lui	a5,0x20000
+  70:	00878793          	add	a5,a5,8 # 20000008 <_stack_top+0x1fff0008>
+  74:	fe842703          	lw	a4,-24(s0)
+  78:	00e7a023          	sw	a4,0(a5)
+  7c:	00000797          	auipc	a5,0x0
+  80:	fef42223          	sw	a5,-28(s0)
+  84:	200007b7          	lui	a5,0x20000
+  88:	00c78793          	add	a5,a5,12 # 2000000c <_stack_top+0x1fff000c>
+  8c:	fe442703          	lw	a4,-28(s0)
+  90:	00e7a023          	sw	a4,0(a5)
+  94:	200007b7          	lui	a5,0x20000
+  98:	01078793          	add	a5,a5,16 # 20000010 <_stack_top+0x1fff0010>
+  9c:	0ff00713          	li	a4,255
+  a0:	00e7a023          	sw	a4,0(a5)
+  a4:	00000793          	li	a5,0
+  a8:	00078513          	mv	a0,a5
+  ac:	01c12403          	lw	s0,28(sp)
+  b0:	02010113          	add	sp,sp,32
+  b4:	00008067          	ret

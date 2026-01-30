@@ -1,0 +1,90 @@
+
+/work/tests/output/test_jump.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00000000 <_start>:
+   0:	00010117          	auipc	sp,0x10
+   4:	00010113          	mv	sp,sp
+   8:	12400293          	li	t0,292
+   c:	00100313          	li	t1,1
+  10:	0062a023          	sw	t1,0(t0)
+  14:	00200313          	li	t1,2
+  18:	0062a223          	sw	t1,4(t0)
+  1c:	00300313          	li	t1,3
+  20:	0062a423          	sw	t1,8(t0)
+
+00000024 <done>:
+  24:	0000006f          	j	24 <done>
+
+00000028 <funcao_simples>:
+  28:	ff010113          	add	sp,sp,-16 # fff0 <_bss_end+0xfecc>
+  2c:	00812623          	sw	s0,12(sp)
+  30:	01010413          	add	s0,sp,16
+  34:	200007b7          	lui	a5,0x20000
+  38:	00100713          	li	a4,1
+  3c:	00e7a023          	sw	a4,0(a5) # 20000000 <_stack_top+0x1fff0000>
+  40:	00000013          	nop
+  44:	00c12403          	lw	s0,12(sp)
+  48:	01010113          	add	sp,sp,16
+  4c:	00008067          	ret
+
+00000050 <soma>:
+  50:	fe010113          	add	sp,sp,-32
+  54:	00812e23          	sw	s0,28(sp)
+  58:	02010413          	add	s0,sp,32
+  5c:	fea42623          	sw	a0,-20(s0)
+  60:	feb42423          	sw	a1,-24(s0)
+  64:	fec42703          	lw	a4,-20(s0)
+  68:	fe842783          	lw	a5,-24(s0)
+  6c:	00f707b3          	add	a5,a4,a5
+  70:	00078513          	mv	a0,a5
+  74:	01c12403          	lw	s0,28(sp)
+  78:	02010113          	add	sp,sp,32
+  7c:	00008067          	ret
+
+00000080 <funcao_param>:
+  80:	fe010113          	add	sp,sp,-32
+  84:	00812e23          	sw	s0,28(sp)
+  88:	02010413          	add	s0,sp,32
+  8c:	fea42623          	sw	a0,-20(s0)
+  90:	200007b7          	lui	a5,0x20000
+  94:	00878793          	add	a5,a5,8 # 20000008 <_stack_top+0x1fff0008>
+  98:	fec42703          	lw	a4,-20(s0)
+  9c:	00e7a023          	sw	a4,0(a5)
+  a0:	00000013          	nop
+  a4:	01c12403          	lw	s0,28(sp)
+  a8:	02010113          	add	sp,sp,32
+  ac:	00008067          	ret
+
+000000b0 <main>:
+  b0:	fe010113          	add	sp,sp,-32
+  b4:	00112e23          	sw	ra,28(sp)
+  b8:	00812c23          	sw	s0,24(sp)
+  bc:	02010413          	add	s0,sp,32
+  c0:	f69ff0ef          	jal	28 <funcao_simples>
+  c4:	200007b7          	lui	a5,0x20000
+  c8:	00478793          	add	a5,a5,4 # 20000004 <_stack_top+0x1fff0004>
+  cc:	00200713          	li	a4,2
+  d0:	00e7a023          	sw	a4,0(a5)
+  d4:	00300513          	li	a0,3
+  d8:	fa9ff0ef          	jal	80 <funcao_param>
+  dc:	00600593          	li	a1,6
+  e0:	00400513          	li	a0,4
+  e4:	f6dff0ef          	jal	50 <soma>
+  e8:	fea42623          	sw	a0,-20(s0)
+  ec:	200007b7          	lui	a5,0x20000
+  f0:	00c78793          	add	a5,a5,12 # 2000000c <_stack_top+0x1fff000c>
+  f4:	fec42703          	lw	a4,-20(s0)
+  f8:	00e7a023          	sw	a4,0(a5)
+  fc:	200007b7          	lui	a5,0x20000
+ 100:	01078793          	add	a5,a5,16 # 20000010 <_stack_top+0x1fff0010>
+ 104:	0ff00713          	li	a4,255
+ 108:	00e7a023          	sw	a4,0(a5)
+ 10c:	00000793          	li	a5,0
+ 110:	00078513          	mv	a0,a5
+ 114:	01c12083          	lw	ra,28(sp)
+ 118:	01812403          	lw	s0,24(sp)
+ 11c:	02010113          	add	sp,sp,32
+ 120:	00008067          	ret
