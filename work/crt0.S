@@ -1,40 +1,38 @@
 /* crt0.S - Startup Code para RV32I */
 .section .text.init
 .global _start
+.global _bss_start
+.global _bss_end
 
 _start:
-    /* --- 1. INICIALIZAR PILHA --- */
-    la sp, _stack_top
-
-    /* --- 2. INICIALIZAR .DATA (copiar de ROM para RAM) --- */
-    la t0, _data_load     /* Endereço dos dados na ROM */
-    la t1, _data_start    /* Endereço de destino na RAM */
-    la t2, _data_end      /* Fim da seção .data */
-
-copy_data:
-    beq t1, t2, init_bss  /* Se já copiou tudo, vai pro BSS */
-    lw t3, 0(t0)          /* Lê da ROM */
-    sw t3, 0(t1)          /* Escreve na RAM */
-    addi t0, t0, 4
-    addi t1, t1, 4
-    j copy_data
-
-init_bss:
-    /* --- 3. LIMPAR BSS (zerar variáveis não inicializadas) --- */
-    la t0, _bss_start
-    la t1, _bss_end
-
+    /* 1. DESABILITAR INTERRUPÇÕES (se houver) */
+    /* Não necessário para RV32I base sem extensões */
+    
+    /* 2. INICIALIZAR STACK POINTER */
+    lui sp, 0x10              # sp = 0x10000 (64KB, topo da RAM)
+    
+    /* 3. INICIALIZAR GLOBAL POINTER (opcional) */
+    /* lui gp, %hi(__global_pointer$) */
+    /* addi gp, gp, %lo(__global_pointer$) */
+    
+    /* 4. CARREGAR ENDEREÇOS BSS */
+    lui t0, %hi(_bss_start)
+    addi t0, t0, %lo(_bss_start)
+    lui t1, %hi(_bss_end)
+    addi t1, t1, %lo(_bss_end)
+    
+    /* 5. LIMPAR BSS (zerar variáveis não inicializadas) */
 clear_bss:
-    beq t0, t1, call_main /* Se terminou, vai pro main */
-    sw zero, 0(t0)
-    addi t0, t0, 4
-    j clear_bss
-
+    beq t0, t1, call_main     # Se t0 == t1, terminou
+    sw zero, 0(t0)            # Escreve 0
+    addi t0, t0, 4            # Próxima word
+    j clear_bss               # Repete
+    
 call_main:
-    /* --- 4. CHAMAR MAIN --- */
+    /* 6. CHAMAR MAIN */
     jal ra, main
-
-    /* --- 5. LOOP INFINITO (se main retornar) --- */
+    
+    /* 7. LOOP INFINITO (se main retornar) */
 exit:
     j exit
 

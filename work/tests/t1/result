@@ -1,0 +1,17 @@
+📝 TESTE 2: Aritmética (ADD, SUB, SLT)
+
+REGISTRADORES:
+x5  (t0) = 00000005
+x6  (t1) = 0000000a
+x7  (t2) = 0000000f
+x8  (s0) = fffffffb
+x9  (s1) = 00000000
+x10 (a0) = 00000000
+
+RAM (Word-Addressed):
+Word 0x40 = 0000000f
+Word 0x41 = fffffffb
+Word 0x42 = 00000000
+Word 0x43 = 00000000
+
+PC final = 0x28

@@ -1,0 +1,12 @@
+📝 TESTE 1: Básico (ADDI + SW + LW)
+REGISTRADORES:
+x5  (t0) = 0000000a
+x6  (t1) = 00000014
+x7  (t2) = 00000028
+
+RAM (Word-Addressed):
+Word 0x40 = 0000000a
+Word 0x41 = 00000014
+Word 0x42 = 00000028
+
+PC final = 0x24

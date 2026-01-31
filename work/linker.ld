@@ -1,65 +1,72 @@
+/* linker.ld - Script de Linkagem para RV32I */
+
 ENTRY(_start)
 
 MEMORY
 {
-    /* 64KB de RAM (ajuste conforme seu Logisim) */
-    RAM (rwx) : ORIGIN = 0x00000000, LENGTH = 0x10000
+    RAM (rwx) : ORIGIN = 0x00000000, LENGTH = 0x10000  /* 64KB */
 }
+
+/* Símbolos importantes */
+_stack_size = 0x1000;  /* 4KB de stack */
 
 SECTIONS
 {
-    /* 1. CÓDIGO (.text) - Começa em 0x0000 */
-    .text : ALIGN(4)
+    /* ========== CÓDIGO ========== */
+    .text 0x00000000 : ALIGN(4)
     {
-        *(.text.init)    /* crt0.S primeiro */
-        *(.text*)
-        *(.text.*)
+        _text_start = .;
+        *(.text.init)        /* crt0.S PRIMEIRO! */
+        *(.text .text.*)     /* Resto do código */
+        _text_end = .;
     } > RAM
-
-    /* 2. DADOS SOMENTE LEITURA (.rodata) */
+    
+    /* ========== DADOS SOMENTE LEITURA ========== */
     .rodata : ALIGN(4)
     {
-        *(.rodata*)
-        *(.rodata.*)
+        _rodata_start = .;
+        *(.rodata .rodata.*)
+        *(.srodata .srodata.*)
+        _rodata_end = .;
     } > RAM
-
-    /* 3. DADOS INICIALIZADOS (.data) */
-    /* Armazena na ROM, mas roda na RAM */
+    
+    /* ========== DADOS INICIALIZADOS ========== */
     .data : ALIGN(4)
     {
         _data_start = .;
-        *(.data*)
-        *(.data.*)
-        *(.sdata*)
+        *(.data .data.*)
+        *(.sdata .sdata.*)
         _data_end = .;
     } > RAM
-
-    _data_load = LOADADDR(.data);
-
-    /* 4. DADOS NÃO INICIALIZADOS (.bss) */
+    
+    /* ========== DADOS NÃO INICIALIZADOS ========== */
     .bss : ALIGN(4)
     {
         _bss_start = .;
-        *(.bss*)
-        *(.bss.*)
-        *(.sbss*)
+        *(.bss .bss.*)
+        *(.sbss .sbss.*)
         *(COMMON)
         _bss_end = .;
     } > RAM
-
-    /* 5. PILHA (Stack) */
+    
+    /* ========== HEAP E STACK ========== */
     . = ALIGN(16);
     _heap_start = .;
-    . = ORIGIN(RAM) + LENGTH(RAM) - 0x100; /* Reserva 256 bytes para stack */
-    _stack_bottom = .;
-    . = ORIGIN(RAM) + LENGTH(RAM);
-    _stack_top = .;
-
-    /* Descarta seções desnecessárias */
+    
+    /* Stack no final da RAM */
+    _stack_bottom = ORIGIN(RAM) + LENGTH(RAM) - _stack_size;
+    _stack_top = ORIGIN(RAM) + LENGTH(RAM);
+    
+    /* Verificações */
+    ASSERT(_bss_end <= _stack_bottom, "Programa muito grande! Colide com stack.")
+    ASSERT(_text_start == 0x00000000, "Código não começa em 0x00000000!")
+    
+    /* ========== DESCARTE ========== */
     /DISCARD/ :
     {
         *(.comment)
-        *(.eh_frame)
         *(.note*)
+        *(.eh_frame*)
+        *(.riscv.attributes)
     }
 }
