@@ -1,17 +1,27 @@
-📝 TESTE 2: Aritmética (ADD, SUB, SLT)
+Endereço 0x100-0x103: 44 34 22 11  (0x11223444)
+Endereço 0x104-0x107: cd ab cd ab  (0xABCDABCD)
+Endereço 0x108-0x10B: aa bb cc dd  (0xDDCCBBAA)
+Endereço 0x10C-0x10F: 00 ff 80 7f  (0x7F80FF00)
 
-REGISTRADORES:
-x5  (t0) = 00000005
-x6  (t1) = 0000000a
-x7  (t2) = 0000000f
-x8  (s0) = fffffffb
-x9  (s1) = 00000000
-x10 (a0) = 00000000
-
-RAM (Word-Addressed):
-Word 0x40 = 0000000f
-Word 0x41 = fffffffb
-Word 0x42 = 00000000
-Word 0x43 = 00000000
-
-PC final = 0x28
+Registrador    Valor Esperado    Tipo de Load
+x1    0x00000100    Base address
+x5    0x11223444    LW
+x6    0xABCDABCD    LW
+x7    0xDDCCBBAA    LW
+x8    0x7F80FF00    LW
+x9    0x00003444    LH
+x10    0x00001122    LH
+x11    0xFFFFABCD    LH (sinal negativo)
+x12    0xFFFFABCD    LH (sinal negativo)
+x13    0x0000ABCD    LHU
+x14    0x0000ABCD    LHU
+x15    0x0000BBAA    LHU
+x16    0x00000044    LB
+x17    0x00000034    LB
+x18    0xFFFFFFAA    LB (sinal negativo)
+x19    0xFFFFFFBB    LB (sinal negativo)
+x20    0xFFFFFFCC    LB (sinal negativo)
+x21    0x000000AA    LBU
+x22    0x000000BB    LBU
+x23    0x000000DD    LBU
+x24    0x0000007F    LBU
