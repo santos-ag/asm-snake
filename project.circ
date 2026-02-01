@@ -612,9 +612,9 @@
     <comp lib="4" loc="(580,460)" name="ROM">
       <a name="appearance" val="logisim_evolution"/>
       <a name="contents">addr/data: 8 32
-500093 fff00113 300193 213 293 313 393 413
-493 17517 c50513 10c463 100213 20d463 200293 10d463
-300313 10e463 400393 20f463 500413 fe20c6e3 600493 63
+500093 300113 fff00193 8000213 2082b3 40208333 20f3b3 20e433
+20c4b3 209533 20d5b3 4020d633 20a6b3 20b733 a0c793 a0e813
+70f893 a0a913 30b993 511a13 20da93 4011db13 63
 </a>
       <a name="dataWidth" val="32"/>
       <a name="label" val="InstMem"/>
@@ -2490,7 +2490,6 @@
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="north"/>
       <a name="label" val="AUIPC"/>
-      <a name="radix" val="16"/>
     </comp>
     <comp lib="0" loc="(280,70)" name="Tunnel">
       <a name="label" val="rs1_val"/>
@@ -2855,16 +2854,7 @@
     <comp lib="0" loc="(530,190)" name="Probe">
       <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
-      <a name="radix" val="10unsigned"/>
-    </comp>
-    <comp lib="0" loc="(840,210)" name="Probe">
-      <a name="appearance" val="NewPins"/>
-      <a name="facing" val="west"/>
       <a name="radix" val="16"/>
-    </comp>
-    <comp lib="0" loc="(850,160)" name="Splitter">
-      <a name="fanout" val="14"/>
-      <a name="incoming" val="14"/>
     </comp>
     <comp lib="0" loc="(870,290)" name="Splitter">
       <a name="bit1" val="0"/>
@@ -2921,7 +2911,7 @@
       <a name="addrWidth" val="6"/>
       <a name="appearance" val="logisim_evolution"/>
       <a name="contents">addr/data: 6 4
-0 2 3 4 5 6 8 0
+0 2 3 4 5 6 8 9
 1 2 3 4 5 7 8 9
 0 2 3 4 5 6 8 9
 0 2 3 4 5 7 8 9
@@ -2969,15 +2959,7 @@
     <wire from="(510,230)" to="(530,230)"/>
     <wire from="(510,240)" to="(550,240)"/>
     <wire from="(530,190)" to="(530,230)"/>
-    <wire from="(790,290)" to="(820,290)"/>
-    <wire from="(820,190)" to="(830,190)"/>
-    <wire from="(820,210)" to="(820,290)"/>
-    <wire from="(820,210)" to="(830,210)"/>
-    <wire from="(820,290)" to="(870,290)"/>
-    <wire from="(830,190)" to="(830,210)"/>
-    <wire from="(830,190)" to="(850,190)"/>
-    <wire from="(830,210)" to="(840,210)"/>
-    <wire from="(850,160)" to="(850,190)"/>
+    <wire from="(790,290)" to="(870,290)"/>
     <wire from="(880,310)" to="(880,440)"/>
     <wire from="(880,440)" to="(890,440)"/>
     <wire from="(890,310)" to="(890,320)"/>
@@ -3029,13 +3011,13 @@
     </comp>
     <comp lib="0" loc="(1050,600)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="label" val="Reset"/>
-    </comp>
-    <comp lib="0" loc="(1050,600)" name="Pin">
-      <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="R"/>
       <a name="output" val="true"/>
+    </comp>
+    <comp lib="0" loc="(1050,600)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="Reset"/>
     </comp>
     <comp lib="0" loc="(1090,510)" name="Tunnel">
       <a name="facing" val="east"/>
@@ -3063,13 +3045,13 @@
     </comp>
     <comp lib="0" loc="(1340,660)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="facing" val="west"/>
-      <a name="label" val="ck"/>
-      <a name="output" val="true"/>
+      <a name="label" val="clk"/>
     </comp>
     <comp lib="0" loc="(1340,660)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="label" val="clk"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="ck"/>
+      <a name="output" val="true"/>
     </comp>
     <comp lib="0" loc="(1340,920)" name="Tunnel">
       <a name="facing" val="north"/>
@@ -3265,13 +3247,13 @@
     </comp>
     <comp lib="0" loc="(790,940)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="facing" val="west"/>
-      <a name="label" val="mw"/>
-      <a name="output" val="true"/>
+      <a name="label" val="MemWrite"/>
     </comp>
     <comp lib="0" loc="(790,940)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="label" val="MemWrite"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="mw"/>
+      <a name="output" val="true"/>
     </comp>
     <comp lib="0" loc="(860,1170)" name="Tunnel">
       <a name="facing" val="east"/>
