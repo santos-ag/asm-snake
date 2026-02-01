@@ -27,7 +27,7 @@ echo "[2/5] Compilando main.c..."
 riscv-none-elf-gcc \
   -march=rv32i \
   -mabi=ilp32 \
-  -O0 \
+  -Og \
   -g \
   -fno-builtin \
   -fno-stack-protector \
@@ -48,9 +48,9 @@ riscv-none-elf-gcc \
   -T linker.ld \
   -Wl,-Map=main.map \
   -Wl,--no-relax \
+  -Wl,--gc-sections \
   crt0.o main.o \
   -o main.elf
-
 echo "[4/5] Gerando disassembly..."
 riscv-none-elf-objdump -d -M no-aliases main.elf >main.dump
 
