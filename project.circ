@@ -836,16 +836,6 @@
       <a name="label" val="instruction"/>
       <a name="width" val="32"/>
     </comp>
-    <comp lib="0" loc="(890,1730)" name="Tunnel">
-      <a name="facing" val="east"/>
-      <a name="label" val="instruction"/>
-      <a name="width" val="32"/>
-    </comp>
-    <comp lib="0" loc="(890,1770)" name="Tunnel">
-      <a name="facing" val="east"/>
-      <a name="label" val="RAM_OUT"/>
-      <a name="width" val="32"/>
-    </comp>
     <comp lib="0" loc="(890,1770)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="label" val="RAM_OUT"/>
@@ -854,6 +844,16 @@
     <comp lib="0" loc="(890,1810)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="label" val="DATA_OUT"/>
+      <a name="width" val="32"/>
+    </comp>
+    <comp lib="0" loc="(900,1740)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="instruction"/>
+      <a name="width" val="32"/>
+    </comp>
+    <comp lib="0" loc="(900,1780)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="RAM_OUT"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(900,680)" name="Tunnel">
@@ -1333,8 +1333,9 @@ a54080e7 97 cac080e7 fa050ce3 97 a6c080e7 fadff06f 3039
     <wire from="(890,730)" to="(890,750)"/>
     <wire from="(890,730)" to="(900,730)"/>
     <wire from="(890,750)" to="(910,750)"/>
-    <wire from="(900,1760)" to="(900,1810)"/>
+    <wire from="(900,1760)" to="(900,1780)"/>
     <wire from="(900,1760)" to="(930,1760)"/>
+    <wire from="(900,1780)" to="(900,1810)"/>
     <wire from="(900,2280)" to="(990,2280)"/>
     <wire from="(900,680)" to="(900,730)"/>
     <wire from="(910,170)" to="(990,170)"/>
@@ -3680,13 +3681,13 @@ a54080e7 97 cac080e7 fa050ce3 97 a6c080e7 fadff06f 3039
     </comp>
     <comp lib="0" loc="(1050,600)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="label" val="Reset"/>
-    </comp>
-    <comp lib="0" loc="(1050,600)" name="Pin">
-      <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="R"/>
       <a name="type" val="output"/>
+    </comp>
+    <comp lib="0" loc="(1050,600)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="Reset"/>
     </comp>
     <comp lib="0" loc="(1090,510)" name="Tunnel">
       <a name="facing" val="east"/>
@@ -3714,13 +3715,13 @@ a54080e7 97 cac080e7 fa050ce3 97 a6c080e7 fadff06f 3039
     </comp>
     <comp lib="0" loc="(1340,660)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="facing" val="west"/>
-      <a name="label" val="ck"/>
-      <a name="type" val="output"/>
+      <a name="label" val="clk"/>
     </comp>
     <comp lib="0" loc="(1340,660)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="label" val="clk"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="ck"/>
+      <a name="type" val="output"/>
     </comp>
     <comp lib="0" loc="(1340,920)" name="Tunnel">
       <a name="facing" val="north"/>
@@ -3915,13 +3916,13 @@ a54080e7 97 cac080e7 fa050ce3 97 a6c080e7 fadff06f 3039
     </comp>
     <comp lib="0" loc="(790,940)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="facing" val="west"/>
-      <a name="label" val="mw"/>
-      <a name="type" val="output"/>
+      <a name="label" val="MemWrite"/>
     </comp>
     <comp lib="0" loc="(790,940)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="label" val="MemWrite"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="mw"/>
+      <a name="type" val="output"/>
     </comp>
     <comp lib="0" loc="(860,1170)" name="Tunnel">
       <a name="facing" val="east"/>
