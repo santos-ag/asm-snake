@@ -7,10 +7,10 @@ Disassembly of section .text:
 00000000 <_start>:
    0:	00010137          	lui	sp,0x10
    4:	00010113          	mv	sp,sp
-   8:	000002b7          	lui	t0,0x0
-   c:	68028293          	add	t0,t0,1664 # 680 <game>
+   8:	000012b7          	lui	t0,0x1
+   c:	89828293          	add	t0,t0,-1896 # 898 <game>
   10:	00001337          	lui	t1,0x1
-  14:	89430313          	add	t1,t1,-1900 # 894 <_bss_end>
+  14:	ab030313          	add	t1,t1,-1360 # ab0 <_bss_end>
 
 00000018 <clear_bss>:
   18:	00628863          	beq	t0,t1,28 <call_main>
@@ -19,7 +19,7 @@ Disassembly of section .text:
   24:	ff5ff06f          	j	18 <clear_bss>
 
 00000028 <call_main>:
-  28:	5ec000ef          	jal	614 <main>
+  28:	005000ef          	jal	82c <main>
 
 0000002c <exit>:
   2c:	0000006f          	j	2c <exit>
@@ -35,8 +35,8 @@ Disassembly of section .text:
   4c:	00008067          	ret
 
 00000050 <random_number>:
-  50:	00000637          	lui	a2,0x0
-  54:	67c62703          	lw	a4,1660(a2) # 67c <_text_end>
+  50:	00001637          	lui	a2,0x1
+  54:	89462703          	lw	a4,-1900(a2) # 894 <_text_end>
   58:	00871693          	sll	a3,a4,0x8
   5c:	40e686b3          	sub	a3,a3,a4
   60:	00369793          	sll	a5,a3,0x3
@@ -57,7 +57,7 @@ Disassembly of section .text:
   9c:	800007b7          	lui	a5,0x80000
   a0:	fff78793          	add	a5,a5,-1 # 7fffffff <_stack_top+0x7ffeffff>
   a4:	00f57533          	and	a0,a0,a5
-  a8:	66a62e23          	sw	a0,1660(a2)
+  a8:	88a62a23          	sw	a0,-1900(a2)
   ac:	00008067          	ret
 
 000000b0 <delay>:
@@ -73,378 +73,518 @@ Disassembly of section .text:
   d4:	01010113          	add	sp,sp,16
   d8:	00008067          	ret
 
-000000dc <game_init>:
-  dc:	ff010113          	add	sp,sp,-16
-  e0:	00112623          	sw	ra,12(sp)
-  e4:	00812423          	sw	s0,8(sp)
-  e8:	00000713          	li	a4,0
-  ec:	0200006f          	j	10c <game_init+0x30>
-  f0:	00171693          	sll	a3,a4,0x1
-  f4:	000007b7          	lui	a5,0x0
-  f8:	68078793          	add	a5,a5,1664 # 680 <game>
-  fc:	00d787b3          	add	a5,a5,a3
- 100:	00078023          	sb	zero,0(a5)
- 104:	000780a3          	sb	zero,1(a5)
- 108:	00170713          	add	a4,a4,1
- 10c:	0ff00793          	li	a5,255
- 110:	fee7d0e3          	bge	a5,a4,f0 <game_init+0x14>
- 114:	000007b7          	lui	a5,0x0
- 118:	68078793          	add	a5,a5,1664 # 680 <game>
- 11c:	00800713          	li	a4,8
- 120:	00e78023          	sb	a4,0(a5)
- 124:	00e780a3          	sb	a4,1(a5)
- 128:	00300713          	li	a4,3
- 12c:	20e7a023          	sw	a4,512(a5)
- 130:	00100793          	li	a5,1
- 134:	02c0006f          	j	160 <game_init+0x84>
- 138:	00000737          	lui	a4,0x0
- 13c:	68070713          	add	a4,a4,1664 # 680 <game>
- 140:	00074603          	lbu	a2,0(a4)
- 144:	40f60633          	sub	a2,a2,a5
- 148:	00179693          	sll	a3,a5,0x1
- 14c:	00d706b3          	add	a3,a4,a3
- 150:	00c68023          	sb	a2,0(a3)
- 154:	00174703          	lbu	a4,1(a4)
- 158:	00e680a3          	sb	a4,1(a3)
- 15c:	00178793          	add	a5,a5,1
- 160:	00200713          	li	a4,2
- 164:	fcf77ae3          	bgeu	a4,a5,138 <game_init+0x5c>
- 168:	00000437          	lui	s0,0x0
- 16c:	68040413          	add	s0,s0,1664 # 680 <game>
- 170:	00100793          	li	a5,1
- 174:	20f42223          	sw	a5,516(s0)
- 178:	00000097          	auipc	ra,0x0
- 17c:	ed8080e7          	jalr	-296(ra) # 50 <random_number>
- 180:	00e00593          	li	a1,14
- 184:	00000097          	auipc	ra,0x0
- 188:	eac080e7          	jalr	-340(ra) # 30 <umod>
- 18c:	00150793          	add	a5,a0,1
- 190:	20f40423          	sb	a5,520(s0)
- 194:	00000097          	auipc	ra,0x0
- 198:	ebc080e7          	jalr	-324(ra) # 50 <random_number>
- 19c:	00e00593          	li	a1,14
- 1a0:	00000097          	auipc	ra,0x0
- 1a4:	e90080e7          	jalr	-368(ra) # 30 <umod>
- 1a8:	00150793          	add	a5,a0,1
- 1ac:	20f404a3          	sb	a5,521(s0)
- 1b0:	20042623          	sw	zero,524(s0)
- 1b4:	20042823          	sw	zero,528(s0)
- 1b8:	00c12083          	lw	ra,12(sp)
- 1bc:	00812403          	lw	s0,8(sp)
- 1c0:	01010113          	add	sp,sp,16
- 1c4:	00008067          	ret
+000000dc <draw_pixel>:
+  dc:	00f00793          	li	a5,15
+  e0:	00a7ec63          	bltu	a5,a0,f8 <draw_pixel+0x1c>
+  e4:	00b7ea63          	bltu	a5,a1,f8 <draw_pixel+0x1c>
+  e8:	00459593          	sll	a1,a1,0x4
+  ec:	00b50533          	add	a0,a0,a1
+  f0:	00251513          	sll	a0,a0,0x2
+  f4:	40c52023          	sw	a2,1024(a0)
+  f8:	00008067          	ret
 
-000001c8 <check_self_collision>:
- 1c8:	00100713          	li	a4,1
- 1cc:	0080006f          	j	1d4 <check_self_collision+0xc>
- 1d0:	00170713          	add	a4,a4,1
- 1d4:	000007b7          	lui	a5,0x0
- 1d8:	68078793          	add	a5,a5,1664 # 680 <game>
- 1dc:	2007a783          	lw	a5,512(a5)
- 1e0:	02f77c63          	bgeu	a4,a5,218 <check_self_collision+0x50>
+000000fc <clear_screen>:
+  fc:	00000693          	li	a3,0
+ 100:	0240006f          	j	124 <clear_screen+0x28>
+ 104:	00469793          	sll	a5,a3,0x4
+ 108:	00f707b3          	add	a5,a4,a5
+ 10c:	00279793          	sll	a5,a5,0x2
+ 110:	40a7a023          	sw	a0,1024(a5)
+ 114:	00170713          	add	a4,a4,1
+ 118:	00f00793          	li	a5,15
+ 11c:	fee7f4e3          	bgeu	a5,a4,104 <clear_screen+0x8>
+ 120:	00168693          	add	a3,a3,1
+ 124:	00f00793          	li	a5,15
+ 128:	00d7e663          	bltu	a5,a3,134 <clear_screen+0x38>
+ 12c:	00000713          	li	a4,0
+ 130:	fe9ff06f          	j	118 <clear_screen+0x1c>
+ 134:	00008067          	ret
+
+00000138 <draw_rect>:
+ 138:	fe010113          	add	sp,sp,-32
+ 13c:	00112e23          	sw	ra,28(sp)
+ 140:	00812c23          	sw	s0,24(sp)
+ 144:	00912a23          	sw	s1,20(sp)
+ 148:	01212823          	sw	s2,16(sp)
+ 14c:	01312623          	sw	s3,12(sp)
+ 150:	01412423          	sw	s4,8(sp)
+ 154:	01512223          	sw	s5,4(sp)
+ 158:	00050a93          	mv	s5,a0
+ 15c:	00058493          	mv	s1,a1
+ 160:	00060913          	mv	s2,a2
+ 164:	00068a13          	mv	s4,a3
+ 168:	00070993          	mv	s3,a4
+ 16c:	02c0006f          	j	198 <draw_rect+0x60>
+ 170:	00098613          	mv	a2,s3
+ 174:	00048593          	mv	a1,s1
+ 178:	00040513          	mv	a0,s0
+ 17c:	00000097          	auipc	ra,0x0
+ 180:	f60080e7          	jalr	-160(ra) # dc <draw_pixel>
+ 184:	00140413          	add	s0,s0,1
+ 188:	00896663          	bltu	s2,s0,194 <draw_rect+0x5c>
+ 18c:	00f00793          	li	a5,15
+ 190:	fe87f0e3          	bgeu	a5,s0,170 <draw_rect+0x38>
+ 194:	00148493          	add	s1,s1,1
+ 198:	009a6a63          	bltu	s4,s1,1ac <draw_rect+0x74>
+ 19c:	00f00793          	li	a5,15
+ 1a0:	0097e663          	bltu	a5,s1,1ac <draw_rect+0x74>
+ 1a4:	000a8413          	mv	s0,s5
+ 1a8:	fe1ff06f          	j	188 <draw_rect+0x50>
+ 1ac:	01c12083          	lw	ra,28(sp)
+ 1b0:	01812403          	lw	s0,24(sp)
+ 1b4:	01412483          	lw	s1,20(sp)
+ 1b8:	01012903          	lw	s2,16(sp)
+ 1bc:	00c12983          	lw	s3,12(sp)
+ 1c0:	00812a03          	lw	s4,8(sp)
+ 1c4:	00412a83          	lw	s5,4(sp)
+ 1c8:	02010113          	add	sp,sp,32
+ 1cc:	00008067          	ret
+
+000001d0 <game_init>:
+ 1d0:	ff010113          	add	sp,sp,-16
+ 1d4:	00112623          	sw	ra,12(sp)
+ 1d8:	00812423          	sw	s0,8(sp)
+ 1dc:	00000713          	li	a4,0
+ 1e0:	0200006f          	j	200 <game_init+0x30>
  1e4:	00171693          	sll	a3,a4,0x1
- 1e8:	000007b7          	lui	a5,0x0
- 1ec:	68078793          	add	a5,a5,1664 # 680 <game>
+ 1e8:	000017b7          	lui	a5,0x1
+ 1ec:	89878793          	add	a5,a5,-1896 # 898 <game>
  1f0:	00d787b3          	add	a5,a5,a3
- 1f4:	0007c783          	lbu	a5,0(a5)
- 1f8:	fca79ce3          	bne	a5,a0,1d0 <check_self_collision+0x8>
- 1fc:	000007b7          	lui	a5,0x0
- 200:	68078793          	add	a5,a5,1664 # 680 <game>
- 204:	00d787b3          	add	a5,a5,a3
- 208:	0017c783          	lbu	a5,1(a5)
- 20c:	fcb792e3          	bne	a5,a1,1d0 <check_self_collision+0x8>
- 210:	00100513          	li	a0,1
- 214:	00008067          	ret
- 218:	00000513          	li	a0,0
- 21c:	00008067          	ret
+ 1f4:	00078023          	sb	zero,0(a5)
+ 1f8:	000780a3          	sb	zero,1(a5)
+ 1fc:	00170713          	add	a4,a4,1
+ 200:	0ff00793          	li	a5,255
+ 204:	fee7d0e3          	bge	a5,a4,1e4 <game_init+0x14>
+ 208:	000017b7          	lui	a5,0x1
+ 20c:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 210:	00800713          	li	a4,8
+ 214:	00e78023          	sb	a4,0(a5)
+ 218:	00e780a3          	sb	a4,1(a5)
+ 21c:	00300713          	li	a4,3
+ 220:	20e7a023          	sw	a4,512(a5)
+ 224:	00100793          	li	a5,1
+ 228:	02c0006f          	j	254 <game_init+0x84>
+ 22c:	00001737          	lui	a4,0x1
+ 230:	89870713          	add	a4,a4,-1896 # 898 <game>
+ 234:	00074603          	lbu	a2,0(a4)
+ 238:	40f60633          	sub	a2,a2,a5
+ 23c:	00179693          	sll	a3,a5,0x1
+ 240:	00d706b3          	add	a3,a4,a3
+ 244:	00c68023          	sb	a2,0(a3)
+ 248:	00174703          	lbu	a4,1(a4)
+ 24c:	00e680a3          	sb	a4,1(a3)
+ 250:	00178793          	add	a5,a5,1
+ 254:	00200713          	li	a4,2
+ 258:	fcf77ae3          	bgeu	a4,a5,22c <game_init+0x5c>
+ 25c:	00001437          	lui	s0,0x1
+ 260:	89840413          	add	s0,s0,-1896 # 898 <game>
+ 264:	00100793          	li	a5,1
+ 268:	20f42223          	sw	a5,516(s0)
+ 26c:	00000097          	auipc	ra,0x0
+ 270:	de4080e7          	jalr	-540(ra) # 50 <random_number>
+ 274:	00e00593          	li	a1,14
+ 278:	00000097          	auipc	ra,0x0
+ 27c:	db8080e7          	jalr	-584(ra) # 30 <umod>
+ 280:	00150793          	add	a5,a0,1
+ 284:	20f40423          	sb	a5,520(s0)
+ 288:	00000097          	auipc	ra,0x0
+ 28c:	dc8080e7          	jalr	-568(ra) # 50 <random_number>
+ 290:	00e00593          	li	a1,14
+ 294:	00000097          	auipc	ra,0x0
+ 298:	d9c080e7          	jalr	-612(ra) # 30 <umod>
+ 29c:	00150793          	add	a5,a0,1
+ 2a0:	20f404a3          	sb	a5,521(s0)
+ 2a4:	20042623          	sw	zero,524(s0)
+ 2a8:	20042823          	sw	zero,528(s0)
+ 2ac:	20042a23          	sw	zero,532(s0)
+ 2b0:	00000513          	li	a0,0
+ 2b4:	00000097          	auipc	ra,0x0
+ 2b8:	e48080e7          	jalr	-440(ra) # fc <clear_screen>
+ 2bc:	00c12083          	lw	ra,12(sp)
+ 2c0:	00812403          	lw	s0,8(sp)
+ 2c4:	01010113          	add	sp,sp,16
+ 2c8:	00008067          	ret
 
-00000220 <check_wall_collision>:
- 220:	00f00793          	li	a5,15
- 224:	00a7e863          	bltu	a5,a0,234 <check_wall_collision+0x14>
- 228:	00b7fa63          	bgeu	a5,a1,23c <check_wall_collision+0x1c>
- 22c:	00100513          	li	a0,1
- 230:	00008067          	ret
- 234:	00100513          	li	a0,1
- 238:	00008067          	ret
- 23c:	00000513          	li	a0,0
- 240:	00008067          	ret
-
-00000244 <spawn_food>:
- 244:	ff010113          	add	sp,sp,-16
- 248:	00112623          	sw	ra,12(sp)
- 24c:	00812423          	sw	s0,8(sp)
- 250:	00912223          	sw	s1,4(sp)
- 254:	00000413          	li	s0,0
- 258:	0540006f          	j	2ac <spawn_food+0x68>
- 25c:	00170713          	add	a4,a4,1
- 260:	000007b7          	lui	a5,0x0
- 264:	68078793          	add	a5,a5,1664 # 680 <game>
- 268:	2007a783          	lw	a5,512(a5)
- 26c:	02f77e63          	bgeu	a4,a5,2a8 <spawn_food+0x64>
- 270:	000007b7          	lui	a5,0x0
- 274:	68078793          	add	a5,a5,1664 # 680 <game>
- 278:	00171693          	sll	a3,a4,0x1
- 27c:	00d786b3          	add	a3,a5,a3
- 280:	0006c683          	lbu	a3,0(a3)
- 284:	2087c783          	lbu	a5,520(a5)
- 288:	fcf69ae3          	bne	a3,a5,25c <spawn_food+0x18>
- 28c:	00171693          	sll	a3,a4,0x1
- 290:	000007b7          	lui	a5,0x0
- 294:	68078793          	add	a5,a5,1664 # 680 <game>
- 298:	00d787b3          	add	a5,a5,a3
- 29c:	0017c783          	lbu	a5,1(a5)
- 2a0:	faf51ee3          	bne	a0,a5,25c <spawn_food+0x18>
- 2a4:	0080006f          	j	2ac <spawn_food+0x68>
- 2a8:	00100413          	li	s0,1
- 2ac:	04041863          	bnez	s0,2fc <spawn_food+0xb8>
- 2b0:	00000097          	auipc	ra,0x0
- 2b4:	da0080e7          	jalr	-608(ra) # 50 <random_number>
- 2b8:	00e00593          	li	a1,14
- 2bc:	00000097          	auipc	ra,0x0
- 2c0:	d74080e7          	jalr	-652(ra) # 30 <umod>
- 2c4:	00150513          	add	a0,a0,1
- 2c8:	000004b7          	lui	s1,0x0
- 2cc:	68048493          	add	s1,s1,1664 # 680 <game>
- 2d0:	20a48423          	sb	a0,520(s1)
- 2d4:	00000097          	auipc	ra,0x0
- 2d8:	d7c080e7          	jalr	-644(ra) # 50 <random_number>
- 2dc:	00e00593          	li	a1,14
- 2e0:	00000097          	auipc	ra,0x0
- 2e4:	d50080e7          	jalr	-688(ra) # 30 <umod>
- 2e8:	00150513          	add	a0,a0,1
- 2ec:	0ff57513          	zext.b	a0,a0
- 2f0:	20a484a3          	sb	a0,521(s1)
- 2f4:	00000713          	li	a4,0
- 2f8:	f69ff06f          	j	260 <spawn_food+0x1c>
- 2fc:	00c12083          	lw	ra,12(sp)
- 300:	00812403          	lw	s0,8(sp)
- 304:	00412483          	lw	s1,4(sp)
- 308:	01010113          	add	sp,sp,16
- 30c:	00008067          	ret
-
-00000310 <get_input>:
- 310:	50002503          	lw	a0,1280(zero) # 500 <game_update+0x1e4>
- 314:	00f57513          	and	a0,a0,15
+000002cc <check_self_collision>:
+ 2cc:	00100713          	li	a4,1
+ 2d0:	0080006f          	j	2d8 <check_self_collision+0xc>
+ 2d4:	00170713          	add	a4,a4,1
+ 2d8:	000017b7          	lui	a5,0x1
+ 2dc:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 2e0:	2007a783          	lw	a5,512(a5)
+ 2e4:	02f77c63          	bgeu	a4,a5,31c <check_self_collision+0x50>
+ 2e8:	00171693          	sll	a3,a4,0x1
+ 2ec:	000017b7          	lui	a5,0x1
+ 2f0:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 2f4:	00d787b3          	add	a5,a5,a3
+ 2f8:	0007c783          	lbu	a5,0(a5)
+ 2fc:	fca79ce3          	bne	a5,a0,2d4 <check_self_collision+0x8>
+ 300:	000017b7          	lui	a5,0x1
+ 304:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 308:	00d787b3          	add	a5,a5,a3
+ 30c:	0017c783          	lbu	a5,1(a5)
+ 310:	fcb792e3          	bne	a5,a1,2d4 <check_self_collision+0x8>
+ 314:	00100513          	li	a0,1
  318:	00008067          	ret
+ 31c:	00000513          	li	a0,0
+ 320:	00008067          	ret
 
-0000031c <game_update>:
- 31c:	000007b7          	lui	a5,0x0
- 320:	68078793          	add	a5,a5,1664 # 680 <game>
- 324:	2107a783          	lw	a5,528(a5)
- 328:	00078463          	beqz	a5,330 <game_update+0x14>
- 32c:	00008067          	ret
- 330:	ff010113          	add	sp,sp,-16
- 334:	00112623          	sw	ra,12(sp)
- 338:	00812423          	sw	s0,8(sp)
- 33c:	00912223          	sw	s1,4(sp)
- 340:	00000097          	auipc	ra,0x0
- 344:	fd0080e7          	jalr	-48(ra) # 310 <get_input>
- 348:	00157793          	and	a5,a0,1
- 34c:	04078e63          	beqz	a5,3a8 <game_update+0x8c>
- 350:	000007b7          	lui	a5,0x0
- 354:	68078793          	add	a5,a5,1664 # 680 <game>
- 358:	2047a703          	lw	a4,516(a5)
- 35c:	00200793          	li	a5,2
- 360:	04f70463          	beq	a4,a5,3a8 <game_update+0x8c>
- 364:	000007b7          	lui	a5,0x0
- 368:	68078793          	add	a5,a5,1664 # 680 <game>
- 36c:	2007a223          	sw	zero,516(a5)
- 370:	000007b7          	lui	a5,0x0
- 374:	68078793          	add	a5,a5,1664 # 680 <game>
- 378:	0007c403          	lbu	s0,0(a5)
- 37c:	0017c483          	lbu	s1,1(a5)
- 380:	2047a783          	lw	a5,516(a5)
- 384:	00200713          	li	a4,2
- 388:	10e78263          	beq	a5,a4,48c <game_update+0x170>
- 38c:	0af76463          	bltu	a4,a5,434 <game_update+0x118>
- 390:	0a078c63          	beqz	a5,448 <game_update+0x12c>
- 394:	00100713          	li	a4,1
- 398:	0ae79c63          	bne	a5,a4,450 <game_update+0x134>
- 39c:	00140413          	add	s0,s0,1
- 3a0:	0ff47413          	zext.b	s0,s0
- 3a4:	0ac0006f          	j	450 <game_update+0x134>
- 3a8:	00257793          	and	a5,a0,2
- 3ac:	02078663          	beqz	a5,3d8 <game_update+0xbc>
- 3b0:	000007b7          	lui	a5,0x0
- 3b4:	68078793          	add	a5,a5,1664 # 680 <game>
- 3b8:	2047a703          	lw	a4,516(a5)
- 3bc:	00300793          	li	a5,3
- 3c0:	00f70c63          	beq	a4,a5,3d8 <game_update+0xbc>
- 3c4:	000007b7          	lui	a5,0x0
- 3c8:	68078793          	add	a5,a5,1664 # 680 <game>
- 3cc:	00100713          	li	a4,1
- 3d0:	20e7a223          	sw	a4,516(a5)
- 3d4:	f9dff06f          	j	370 <game_update+0x54>
- 3d8:	00457793          	and	a5,a0,4
- 3dc:	02078463          	beqz	a5,404 <game_update+0xe8>
- 3e0:	000007b7          	lui	a5,0x0
- 3e4:	68078793          	add	a5,a5,1664 # 680 <game>
- 3e8:	2047a783          	lw	a5,516(a5)
- 3ec:	00078c63          	beqz	a5,404 <game_update+0xe8>
- 3f0:	000007b7          	lui	a5,0x0
- 3f4:	68078793          	add	a5,a5,1664 # 680 <game>
- 3f8:	00200713          	li	a4,2
- 3fc:	20e7a223          	sw	a4,516(a5)
- 400:	f71ff06f          	j	370 <game_update+0x54>
- 404:	00857513          	and	a0,a0,8
- 408:	f60504e3          	beqz	a0,370 <game_update+0x54>
- 40c:	000007b7          	lui	a5,0x0
- 410:	68078793          	add	a5,a5,1664 # 680 <game>
- 414:	2047a703          	lw	a4,516(a5)
- 418:	00100793          	li	a5,1
- 41c:	f4f70ae3          	beq	a4,a5,370 <game_update+0x54>
- 420:	000007b7          	lui	a5,0x0
- 424:	68078793          	add	a5,a5,1664 # 680 <game>
- 428:	00300713          	li	a4,3
- 42c:	20e7a223          	sw	a4,516(a5)
- 430:	f41ff06f          	j	370 <game_update+0x54>
- 434:	00300713          	li	a4,3
- 438:	00e79c63          	bne	a5,a4,450 <game_update+0x134>
- 43c:	fff40413          	add	s0,s0,-1
- 440:	0ff47413          	zext.b	s0,s0
- 444:	00c0006f          	j	450 <game_update+0x134>
- 448:	fff48493          	add	s1,s1,-1
- 44c:	0ff4f493          	zext.b	s1,s1
- 450:	00048593          	mv	a1,s1
- 454:	00040513          	mv	a0,s0
- 458:	00000097          	auipc	ra,0x0
- 45c:	dc8080e7          	jalr	-568(ra) # 220 <check_wall_collision>
- 460:	02051c63          	bnez	a0,498 <game_update+0x17c>
- 464:	00048593          	mv	a1,s1
- 468:	00040513          	mv	a0,s0
+00000324 <check_wall_collision>:
+ 324:	00f00793          	li	a5,15
+ 328:	00a7e863          	bltu	a5,a0,338 <check_wall_collision+0x14>
+ 32c:	00b7fa63          	bgeu	a5,a1,340 <check_wall_collision+0x1c>
+ 330:	00100513          	li	a0,1
+ 334:	00008067          	ret
+ 338:	00100513          	li	a0,1
+ 33c:	00008067          	ret
+ 340:	00000513          	li	a0,0
+ 344:	00008067          	ret
+
+00000348 <spawn_food>:
+ 348:	ff010113          	add	sp,sp,-16
+ 34c:	00112623          	sw	ra,12(sp)
+ 350:	00812423          	sw	s0,8(sp)
+ 354:	00912223          	sw	s1,4(sp)
+ 358:	00000413          	li	s0,0
+ 35c:	0540006f          	j	3b0 <spawn_food+0x68>
+ 360:	00170713          	add	a4,a4,1
+ 364:	000017b7          	lui	a5,0x1
+ 368:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 36c:	2007a783          	lw	a5,512(a5)
+ 370:	02f77e63          	bgeu	a4,a5,3ac <spawn_food+0x64>
+ 374:	000017b7          	lui	a5,0x1
+ 378:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 37c:	00171693          	sll	a3,a4,0x1
+ 380:	00d786b3          	add	a3,a5,a3
+ 384:	0006c683          	lbu	a3,0(a3)
+ 388:	2087c783          	lbu	a5,520(a5)
+ 38c:	fcf69ae3          	bne	a3,a5,360 <spawn_food+0x18>
+ 390:	00171693          	sll	a3,a4,0x1
+ 394:	000017b7          	lui	a5,0x1
+ 398:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 39c:	00d787b3          	add	a5,a5,a3
+ 3a0:	0017c783          	lbu	a5,1(a5)
+ 3a4:	faf51ee3          	bne	a0,a5,360 <spawn_food+0x18>
+ 3a8:	0080006f          	j	3b0 <spawn_food+0x68>
+ 3ac:	00100413          	li	s0,1
+ 3b0:	04041863          	bnez	s0,400 <spawn_food+0xb8>
+ 3b4:	00000097          	auipc	ra,0x0
+ 3b8:	c9c080e7          	jalr	-868(ra) # 50 <random_number>
+ 3bc:	00e00593          	li	a1,14
+ 3c0:	00000097          	auipc	ra,0x0
+ 3c4:	c70080e7          	jalr	-912(ra) # 30 <umod>
+ 3c8:	00150513          	add	a0,a0,1
+ 3cc:	000014b7          	lui	s1,0x1
+ 3d0:	89848493          	add	s1,s1,-1896 # 898 <game>
+ 3d4:	20a48423          	sb	a0,520(s1)
+ 3d8:	00000097          	auipc	ra,0x0
+ 3dc:	c78080e7          	jalr	-904(ra) # 50 <random_number>
+ 3e0:	00e00593          	li	a1,14
+ 3e4:	00000097          	auipc	ra,0x0
+ 3e8:	c4c080e7          	jalr	-948(ra) # 30 <umod>
+ 3ec:	00150513          	add	a0,a0,1
+ 3f0:	0ff57513          	zext.b	a0,a0
+ 3f4:	20a484a3          	sb	a0,521(s1)
+ 3f8:	00000713          	li	a4,0
+ 3fc:	f69ff06f          	j	364 <spawn_food+0x1c>
+ 400:	00c12083          	lw	ra,12(sp)
+ 404:	00812403          	lw	s0,8(sp)
+ 408:	00412483          	lw	s1,4(sp)
+ 40c:	01010113          	add	sp,sp,16
+ 410:	00008067          	ret
+
+00000414 <get_input>:
+ 414:	000017b7          	lui	a5,0x1
+ 418:	9007a503          	lw	a0,-1792(a5) # 900 <game+0x68>
+ 41c:	00f57513          	and	a0,a0,15
+ 420:	00008067          	ret
+
+00000424 <game_update>:
+ 424:	000017b7          	lui	a5,0x1
+ 428:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 42c:	2107a783          	lw	a5,528(a5)
+ 430:	00078463          	beqz	a5,438 <game_update+0x14>
+ 434:	00008067          	ret
+ 438:	fe010113          	add	sp,sp,-32
+ 43c:	00112e23          	sw	ra,28(sp)
+ 440:	00812c23          	sw	s0,24(sp)
+ 444:	00912a23          	sw	s1,20(sp)
+ 448:	01212823          	sw	s2,16(sp)
+ 44c:	01312623          	sw	s3,12(sp)
+ 450:	01412423          	sw	s4,8(sp)
+ 454:	01512223          	sw	s5,4(sp)
+ 458:	000017b7          	lui	a5,0x1
+ 45c:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 460:	2147a703          	lw	a4,532(a5)
+ 464:	00170713          	add	a4,a4,1
+ 468:	20e7aa23          	sw	a4,532(a5)
  46c:	00000097          	auipc	ra,0x0
- 470:	d5c080e7          	jalr	-676(ra) # 1c8 <check_self_collision>
- 474:	02051263          	bnez	a0,498 <game_update+0x17c>
- 478:	000007b7          	lui	a5,0x0
- 47c:	68078793          	add	a5,a5,1664 # 680 <game>
- 480:	2007a583          	lw	a1,512(a5)
- 484:	fff58793          	add	a5,a1,-1
- 488:	05c0006f          	j	4e4 <game_update+0x1c8>
- 48c:	00148493          	add	s1,s1,1
- 490:	0ff4f493          	zext.b	s1,s1
- 494:	fbdff06f          	j	450 <game_update+0x134>
- 498:	000007b7          	lui	a5,0x0
- 49c:	68078793          	add	a5,a5,1664 # 680 <game>
- 4a0:	00100713          	li	a4,1
- 4a4:	20e7a823          	sw	a4,528(a5)
- 4a8:	00c12083          	lw	ra,12(sp)
- 4ac:	00812403          	lw	s0,8(sp)
- 4b0:	00412483          	lw	s1,4(sp)
- 4b4:	01010113          	add	sp,sp,16
- 4b8:	00008067          	ret
- 4bc:	fff78693          	add	a3,a5,-1
- 4c0:	00000737          	lui	a4,0x0
- 4c4:	68070713          	add	a4,a4,1664 # 680 <game>
- 4c8:	00179793          	sll	a5,a5,0x1
- 4cc:	00f707b3          	add	a5,a4,a5
- 4d0:	00169613          	sll	a2,a3,0x1
- 4d4:	00c70733          	add	a4,a4,a2
- 4d8:	00075703          	lhu	a4,0(a4)
- 4dc:	00e79023          	sh	a4,0(a5)
- 4e0:	00068793          	mv	a5,a3
- 4e4:	fcf04ce3          	bgtz	a5,4bc <game_update+0x1a0>
- 4e8:	000007b7          	lui	a5,0x0
- 4ec:	68078793          	add	a5,a5,1664 # 680 <game>
- 4f0:	00878023          	sb	s0,0(a5)
- 4f4:	009780a3          	sb	s1,1(a5)
- 4f8:	2087c783          	lbu	a5,520(a5)
- 4fc:	fa8796e3          	bne	a5,s0,4a8 <game_update+0x18c>
- 500:	000007b7          	lui	a5,0x0
- 504:	68078793          	add	a5,a5,1664 # 680 <game>
- 508:	2097c783          	lbu	a5,521(a5)
- 50c:	f8979ee3          	bne	a5,s1,4a8 <game_update+0x18c>
- 510:	0ff00793          	li	a5,255
- 514:	02b7e063          	bltu	a5,a1,534 <game_update+0x218>
- 518:	000007b7          	lui	a5,0x0
- 51c:	68078793          	add	a5,a5,1664 # 680 <game>
- 520:	00158593          	add	a1,a1,1
- 524:	20b7a023          	sw	a1,512(a5)
- 528:	20c7a703          	lw	a4,524(a5)
- 52c:	00a70713          	add	a4,a4,10
- 530:	20e7a623          	sw	a4,524(a5)
- 534:	00000097          	auipc	ra,0x0
- 538:	d10080e7          	jalr	-752(ra) # 244 <spawn_food>
- 53c:	f6dff06f          	j	4a8 <game_update+0x18c>
-
-00000540 <game_render>:
- 540:	00000793          	li	a5,0
- 544:	0100006f          	j	554 <game_render+0x14>
- 548:	00279713          	sll	a4,a5,0x2
- 54c:	40072023          	sw	zero,1024(a4)
- 550:	00178793          	add	a5,a5,1
- 554:	00f00713          	li	a4,15
- 558:	fef758e3          	bge	a4,a5,548 <game_render+0x8>
- 55c:	00000713          	li	a4,0
- 560:	0080006f          	j	568 <game_render+0x28>
- 564:	00170713          	add	a4,a4,1
- 568:	000007b7          	lui	a5,0x0
- 56c:	68078793          	add	a5,a5,1664 # 680 <game>
- 570:	2007a783          	lw	a5,512(a5)
- 574:	04f77263          	bgeu	a4,a5,5b8 <game_render+0x78>
- 578:	00171693          	sll	a3,a4,0x1
- 57c:	000007b7          	lui	a5,0x0
- 580:	68078793          	add	a5,a5,1664 # 680 <game>
- 584:	00d787b3          	add	a5,a5,a3
- 588:	0007c683          	lbu	a3,0(a5)
- 58c:	0017c783          	lbu	a5,1(a5)
- 590:	00f00613          	li	a2,15
- 594:	fcd668e3          	bltu	a2,a3,564 <game_render+0x24>
- 598:	fcf666e3          	bltu	a2,a5,564 <game_render+0x24>
- 59c:	00279793          	sll	a5,a5,0x2
- 5a0:	4007a603          	lw	a2,1024(a5)
- 5a4:	00100593          	li	a1,1
- 5a8:	00d596b3          	sll	a3,a1,a3
- 5ac:	00d666b3          	or	a3,a2,a3
- 5b0:	40d7a023          	sw	a3,1024(a5)
- 5b4:	fb1ff06f          	j	564 <game_render+0x24>
- 5b8:	000007b7          	lui	a5,0x0
- 5bc:	68078793          	add	a5,a5,1664 # 680 <game>
- 5c0:	2087c783          	lbu	a5,520(a5)
- 5c4:	00f00713          	li	a4,15
- 5c8:	02f76863          	bltu	a4,a5,5f8 <game_render+0xb8>
- 5cc:	00000737          	lui	a4,0x0
- 5d0:	68070713          	add	a4,a4,1664 # 680 <game>
- 5d4:	20974703          	lbu	a4,521(a4)
- 5d8:	00f00693          	li	a3,15
- 5dc:	00e6ee63          	bltu	a3,a4,5f8 <game_render+0xb8>
- 5e0:	00271713          	sll	a4,a4,0x2
- 5e4:	40072683          	lw	a3,1024(a4)
- 5e8:	00100613          	li	a2,1
- 5ec:	00f617b3          	sll	a5,a2,a5
- 5f0:	00f6e7b3          	or	a5,a3,a5
- 5f4:	40f72023          	sw	a5,1024(a4)
- 5f8:	000007b7          	lui	a5,0x0
- 5fc:	68078793          	add	a5,a5,1664 # 680 <game>
- 600:	20c7a703          	lw	a4,524(a5)
- 604:	44e02023          	sw	a4,1088(zero) # 440 <game_update+0x124>
- 608:	2107a783          	lw	a5,528(a5)
- 60c:	44f02223          	sw	a5,1092(zero) # 444 <game_update+0x128>
+ 470:	fa8080e7          	jalr	-88(ra) # 414 <get_input>
+ 474:	00157793          	and	a5,a0,1
+ 478:	06078a63          	beqz	a5,4ec <game_update+0xc8>
+ 47c:	000017b7          	lui	a5,0x1
+ 480:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 484:	2047a703          	lw	a4,516(a5)
+ 488:	00200793          	li	a5,2
+ 48c:	06f70063          	beq	a4,a5,4ec <game_update+0xc8>
+ 490:	000017b7          	lui	a5,0x1
+ 494:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 498:	2007a223          	sw	zero,516(a5)
+ 49c:	000017b7          	lui	a5,0x1
+ 4a0:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 4a4:	2007a983          	lw	s3,512(a5)
+ 4a8:	fff98413          	add	s0,s3,-1
+ 4ac:	00141713          	sll	a4,s0,0x1
+ 4b0:	00e78733          	add	a4,a5,a4
+ 4b4:	00074a03          	lbu	s4,0(a4)
+ 4b8:	00174a83          	lbu	s5,1(a4)
+ 4bc:	0007c483          	lbu	s1,0(a5)
+ 4c0:	0017c903          	lbu	s2,1(a5)
+ 4c4:	2047a783          	lw	a5,516(a5)
+ 4c8:	00200713          	li	a4,2
+ 4cc:	10e78463          	beq	a5,a4,5d4 <game_update+0x1b0>
+ 4d0:	0af76463          	bltu	a4,a5,578 <game_update+0x154>
+ 4d4:	0a078c63          	beqz	a5,58c <game_update+0x168>
+ 4d8:	00100713          	li	a4,1
+ 4dc:	0ae79c63          	bne	a5,a4,594 <game_update+0x170>
+ 4e0:	00148493          	add	s1,s1,1
+ 4e4:	0ff4f493          	zext.b	s1,s1
+ 4e8:	0ac0006f          	j	594 <game_update+0x170>
+ 4ec:	00257793          	and	a5,a0,2
+ 4f0:	02078663          	beqz	a5,51c <game_update+0xf8>
+ 4f4:	000017b7          	lui	a5,0x1
+ 4f8:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 4fc:	2047a703          	lw	a4,516(a5)
+ 500:	00300793          	li	a5,3
+ 504:	00f70c63          	beq	a4,a5,51c <game_update+0xf8>
+ 508:	000017b7          	lui	a5,0x1
+ 50c:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 510:	00100713          	li	a4,1
+ 514:	20e7a223          	sw	a4,516(a5)
+ 518:	f85ff06f          	j	49c <game_update+0x78>
+ 51c:	00457793          	and	a5,a0,4
+ 520:	02078463          	beqz	a5,548 <game_update+0x124>
+ 524:	000017b7          	lui	a5,0x1
+ 528:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 52c:	2047a783          	lw	a5,516(a5)
+ 530:	00078c63          	beqz	a5,548 <game_update+0x124>
+ 534:	000017b7          	lui	a5,0x1
+ 538:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 53c:	00200713          	li	a4,2
+ 540:	20e7a223          	sw	a4,516(a5)
+ 544:	f59ff06f          	j	49c <game_update+0x78>
+ 548:	00857513          	and	a0,a0,8
+ 54c:	f40508e3          	beqz	a0,49c <game_update+0x78>
+ 550:	000017b7          	lui	a5,0x1
+ 554:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 558:	2047a703          	lw	a4,516(a5)
+ 55c:	00100793          	li	a5,1
+ 560:	f2f70ee3          	beq	a4,a5,49c <game_update+0x78>
+ 564:	000017b7          	lui	a5,0x1
+ 568:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 56c:	00300713          	li	a4,3
+ 570:	20e7a223          	sw	a4,516(a5)
+ 574:	f29ff06f          	j	49c <game_update+0x78>
+ 578:	00300713          	li	a4,3
+ 57c:	00e79c63          	bne	a5,a4,594 <game_update+0x170>
+ 580:	fff48493          	add	s1,s1,-1
+ 584:	0ff4f493          	zext.b	s1,s1
+ 588:	00c0006f          	j	594 <game_update+0x170>
+ 58c:	fff90913          	add	s2,s2,-1
+ 590:	0ff97913          	zext.b	s2,s2
+ 594:	00090593          	mv	a1,s2
+ 598:	00048513          	mv	a0,s1
+ 59c:	00000097          	auipc	ra,0x0
+ 5a0:	d88080e7          	jalr	-632(ra) # 324 <check_wall_collision>
+ 5a4:	02051e63          	bnez	a0,5e0 <game_update+0x1bc>
+ 5a8:	00090593          	mv	a1,s2
+ 5ac:	00048513          	mv	a0,s1
+ 5b0:	00000097          	auipc	ra,0x0
+ 5b4:	d1c080e7          	jalr	-740(ra) # 2cc <check_self_collision>
+ 5b8:	02051463          	bnez	a0,5e0 <game_update+0x1bc>
+ 5bc:	000017b7          	lui	a5,0x1
+ 5c0:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 5c4:	2087c783          	lbu	a5,520(a5)
+ 5c8:	04978663          	beq	a5,s1,614 <game_update+0x1f0>
+ 5cc:	00040793          	mv	a5,s0
+ 5d0:	0840006f          	j	654 <game_update+0x230>
+ 5d4:	00190913          	add	s2,s2,1
+ 5d8:	0ff97913          	zext.b	s2,s2
+ 5dc:	fb9ff06f          	j	594 <game_update+0x170>
+ 5e0:	000017b7          	lui	a5,0x1
+ 5e4:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 5e8:	00100713          	li	a4,1
+ 5ec:	20e7a823          	sw	a4,528(a5)
+ 5f0:	01c12083          	lw	ra,28(sp)
+ 5f4:	01812403          	lw	s0,24(sp)
+ 5f8:	01412483          	lw	s1,20(sp)
+ 5fc:	01012903          	lw	s2,16(sp)
+ 600:	00c12983          	lw	s3,12(sp)
+ 604:	00812a03          	lw	s4,8(sp)
+ 608:	00412a83          	lw	s5,4(sp)
+ 60c:	02010113          	add	sp,sp,32
  610:	00008067          	ret
+ 614:	000017b7          	lui	a5,0x1
+ 618:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 61c:	2097c783          	lbu	a5,521(a5)
+ 620:	fb2796e3          	bne	a5,s2,5cc <game_update+0x1a8>
+ 624:	00100513          	li	a0,1
+ 628:	fa5ff06f          	j	5cc <game_update+0x1a8>
+ 62c:	fff78693          	add	a3,a5,-1
+ 630:	00001737          	lui	a4,0x1
+ 634:	89870713          	add	a4,a4,-1896 # 898 <game>
+ 638:	00179793          	sll	a5,a5,0x1
+ 63c:	00f707b3          	add	a5,a4,a5
+ 640:	00169613          	sll	a2,a3,0x1
+ 644:	00c70733          	add	a4,a4,a2
+ 648:	00075703          	lhu	a4,0(a4)
+ 64c:	00e79023          	sh	a4,0(a5)
+ 650:	00068793          	mv	a5,a3
+ 654:	fcf04ce3          	bgtz	a5,62c <game_update+0x208>
+ 658:	000017b7          	lui	a5,0x1
+ 65c:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 660:	00978023          	sb	s1,0(a5)
+ 664:	012780a3          	sb	s2,1(a5)
+ 668:	02050a63          	beqz	a0,69c <game_update+0x278>
+ 66c:	0ff00793          	li	a5,255
+ 670:	0337e063          	bltu	a5,s3,690 <game_update+0x26c>
+ 674:	000017b7          	lui	a5,0x1
+ 678:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 67c:	00198993          	add	s3,s3,1
+ 680:	2137a023          	sw	s3,512(a5)
+ 684:	20c7a703          	lw	a4,524(a5)
+ 688:	00a70713          	add	a4,a4,10
+ 68c:	20e7a623          	sw	a4,524(a5)
+ 690:	00000097          	auipc	ra,0x0
+ 694:	cb8080e7          	jalr	-840(ra) # 348 <spawn_food>
+ 698:	f59ff06f          	j	5f0 <game_update+0x1cc>
+ 69c:	00000613          	li	a2,0
+ 6a0:	000a8593          	mv	a1,s5
+ 6a4:	000a0513          	mv	a0,s4
+ 6a8:	00000097          	auipc	ra,0x0
+ 6ac:	a34080e7          	jalr	-1484(ra) # dc <draw_pixel>
+ 6b0:	f41ff06f          	j	5f0 <game_update+0x1cc>
 
-00000614 <main>:
- 614:	ff010113          	add	sp,sp,-16
- 618:	00112623          	sw	ra,12(sp)
- 61c:	00000097          	auipc	ra,0x0
- 620:	ac0080e7          	jalr	-1344(ra) # dc <game_init>
- 624:	00000097          	auipc	ra,0x0
- 628:	cf8080e7          	jalr	-776(ra) # 31c <game_update>
- 62c:	00000097          	auipc	ra,0x0
- 630:	f14080e7          	jalr	-236(ra) # 540 <game_render>
- 634:	0000c537          	lui	a0,0xc
- 638:	35050513          	add	a0,a0,848 # c350 <_stack_size+0xb350>
- 63c:	00000097          	auipc	ra,0x0
- 640:	a74080e7          	jalr	-1420(ra) # b0 <delay>
- 644:	000007b7          	lui	a5,0x0
- 648:	68078793          	add	a5,a5,1664 # 680 <game>
- 64c:	2107a783          	lw	a5,528(a5)
- 650:	fc078ae3          	beqz	a5,624 <main+0x10>
- 654:	00031537          	lui	a0,0x31
- 658:	d4050513          	add	a0,a0,-704 # 30d40 <_stack_top+0x20d40>
- 65c:	00000097          	auipc	ra,0x0
- 660:	a54080e7          	jalr	-1452(ra) # b0 <delay>
- 664:	00000097          	auipc	ra,0x0
- 668:	cac080e7          	jalr	-852(ra) # 310 <get_input>
- 66c:	fa050ce3          	beqz	a0,624 <main+0x10>
- 670:	00000097          	auipc	ra,0x0
- 674:	a6c080e7          	jalr	-1428(ra) # dc <game_init>
- 678:	fadff06f          	j	624 <main+0x10>
+000006b4 <game_render>:
+ 6b4:	ff010113          	add	sp,sp,-16
+ 6b8:	00112623          	sw	ra,12(sp)
+ 6bc:	00812423          	sw	s0,8(sp)
+ 6c0:	000017b7          	lui	a5,0x1
+ 6c4:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 6c8:	00010637          	lui	a2,0x10
+ 6cc:	f8060613          	add	a2,a2,-128 # ff80 <_heap_end+0xf80>
+ 6d0:	0017c583          	lbu	a1,1(a5)
+ 6d4:	0007c503          	lbu	a0,0(a5)
+ 6d8:	00000097          	auipc	ra,0x0
+ 6dc:	a04080e7          	jalr	-1532(ra) # dc <draw_pixel>
+ 6e0:	00100413          	li	s0,1
+ 6e4:	0300006f          	j	714 <game_render+0x60>
+ 6e8:	00141713          	sll	a4,s0,0x1
+ 6ec:	000017b7          	lui	a5,0x1
+ 6f0:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 6f4:	00e787b3          	add	a5,a5,a4
+ 6f8:	00010637          	lui	a2,0x10
+ 6fc:	f0060613          	add	a2,a2,-256 # ff00 <_heap_end+0xf00>
+ 700:	0017c583          	lbu	a1,1(a5)
+ 704:	0007c503          	lbu	a0,0(a5)
+ 708:	00000097          	auipc	ra,0x0
+ 70c:	9d4080e7          	jalr	-1580(ra) # dc <draw_pixel>
+ 710:	00140413          	add	s0,s0,1
+ 714:	000017b7          	lui	a5,0x1
+ 718:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 71c:	2007a783          	lw	a5,512(a5)
+ 720:	fcf464e3          	bltu	s0,a5,6e8 <game_render+0x34>
+ 724:	00800593          	li	a1,8
+ 728:	000017b7          	lui	a5,0x1
+ 72c:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 730:	2147a503          	lw	a0,532(a5)
+ 734:	00000097          	auipc	ra,0x0
+ 738:	8fc080e7          	jalr	-1796(ra) # 30 <umod>
+ 73c:	00300793          	li	a5,3
+ 740:	02a7ec63          	bltu	a5,a0,778 <game_render+0xc4>
+ 744:	00ff0637          	lui	a2,0xff0
+ 748:	00001437          	lui	s0,0x1
+ 74c:	89840413          	add	s0,s0,-1896 # 898 <game>
+ 750:	20944583          	lbu	a1,521(s0)
+ 754:	20844503          	lbu	a0,520(s0)
+ 758:	00000097          	auipc	ra,0x0
+ 75c:	984080e7          	jalr	-1660(ra) # dc <draw_pixel>
+ 760:	21042783          	lw	a5,528(s0)
+ 764:	00079e63          	bnez	a5,780 <game_render+0xcc>
+ 768:	00c12083          	lw	ra,12(sp)
+ 76c:	00812403          	lw	s0,8(sp)
+ 770:	01010113          	add	sp,sp,16
+ 774:	00008067          	ret
+ 778:	00880637          	lui	a2,0x880
+ 77c:	fcdff06f          	j	748 <game_render+0x94>
+ 780:	00400593          	li	a1,4
+ 784:	000017b7          	lui	a5,0x1
+ 788:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 78c:	2147a503          	lw	a0,532(a5)
+ 790:	00000097          	auipc	ra,0x0
+ 794:	8a0080e7          	jalr	-1888(ra) # 30 <umod>
+ 798:	00100793          	li	a5,1
+ 79c:	04a7f463          	bgeu	a5,a0,7e4 <game_render+0x130>
+ 7a0:	00000413          	li	s0,0
+ 7a4:	0740006f          	j	818 <game_render+0x164>
+ 7a8:	00141713          	sll	a4,s0,0x1
+ 7ac:	000017b7          	lui	a5,0x1
+ 7b0:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 7b4:	00e787b3          	add	a5,a5,a4
+ 7b8:	00ff0637          	lui	a2,0xff0
+ 7bc:	0017c583          	lbu	a1,1(a5)
+ 7c0:	0007c503          	lbu	a0,0(a5)
+ 7c4:	00000097          	auipc	ra,0x0
+ 7c8:	918080e7          	jalr	-1768(ra) # dc <draw_pixel>
+ 7cc:	00140413          	add	s0,s0,1
+ 7d0:	000017b7          	lui	a5,0x1
+ 7d4:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 7d8:	2007a783          	lw	a5,512(a5)
+ 7dc:	fcf466e3          	bltu	s0,a5,7a8 <game_render+0xf4>
+ 7e0:	f89ff06f          	j	768 <game_render+0xb4>
+ 7e4:	00000413          	li	s0,0
+ 7e8:	fe9ff06f          	j	7d0 <game_render+0x11c>
+ 7ec:	00141713          	sll	a4,s0,0x1
+ 7f0:	000017b7          	lui	a5,0x1
+ 7f4:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 7f8:	00e787b3          	add	a5,a5,a4
+ 7fc:	00444637          	lui	a2,0x444
+ 800:	44460613          	add	a2,a2,1092 # 444444 <_stack_top+0x434444>
+ 804:	0017c583          	lbu	a1,1(a5)
+ 808:	0007c503          	lbu	a0,0(a5)
+ 80c:	00000097          	auipc	ra,0x0
+ 810:	8d0080e7          	jalr	-1840(ra) # dc <draw_pixel>
+ 814:	00140413          	add	s0,s0,1
+ 818:	000017b7          	lui	a5,0x1
+ 81c:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 820:	2007a783          	lw	a5,512(a5)
+ 824:	fcf464e3          	bltu	s0,a5,7ec <game_render+0x138>
+ 828:	f41ff06f          	j	768 <game_render+0xb4>
+
+0000082c <main>:
+ 82c:	ff010113          	add	sp,sp,-16
+ 830:	00112623          	sw	ra,12(sp)
+ 834:	00000097          	auipc	ra,0x0
+ 838:	99c080e7          	jalr	-1636(ra) # 1d0 <game_init>
+ 83c:	00000097          	auipc	ra,0x0
+ 840:	be8080e7          	jalr	-1048(ra) # 424 <game_update>
+ 844:	00000097          	auipc	ra,0x0
+ 848:	e70080e7          	jalr	-400(ra) # 6b4 <game_render>
+ 84c:	0000c537          	lui	a0,0xc
+ 850:	35050513          	add	a0,a0,848 # c350 <_stack_size+0xb350>
+ 854:	00000097          	auipc	ra,0x0
+ 858:	85c080e7          	jalr	-1956(ra) # b0 <delay>
+ 85c:	000017b7          	lui	a5,0x1
+ 860:	89878793          	add	a5,a5,-1896 # 898 <game>
+ 864:	2107a783          	lw	a5,528(a5)
+ 868:	fc078ae3          	beqz	a5,83c <main+0x10>
+ 86c:	00031537          	lui	a0,0x31
+ 870:	d4050513          	add	a0,a0,-704 # 30d40 <_stack_top+0x20d40>
+ 874:	00000097          	auipc	ra,0x0
+ 878:	83c080e7          	jalr	-1988(ra) # b0 <delay>
+ 87c:	00000097          	auipc	ra,0x0
+ 880:	b98080e7          	jalr	-1128(ra) # 414 <get_input>
+ 884:	fa050ce3          	beqz	a0,83c <main+0x10>
+ 888:	00000097          	auipc	ra,0x0
+ 88c:	948080e7          	jalr	-1720(ra) # 1d0 <game_init>
+ 890:	fadff06f          	j	83c <main+0x10>
