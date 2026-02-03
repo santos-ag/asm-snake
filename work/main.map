@@ -7,7 +7,6 @@ Discarded input sections
  .riscv.attributes
                 0x00000000       0x1a crt0.o
  .data          0x00000000        0x0 main.o
- .bss           0x00000000        0x0 main.o
  .comment       0x00000000       0x34 main.o
  .riscv.attributes
                 0x00000000       0x1c main.o
@@ -24,73 +23,57 @@ LOAD crt0.o
 LOAD main.o
                 0x00001000                        _stack_size = 0x1000
 
-.text           0x00000000      0xb30
+.text           0x00000000      0x67c
                 0x00000000                        _text_start = .
  *(.text.init)
  .text.init     0x00000000       0x30 crt0.o
                 0x00000000                _start
  *(.text .text.*)
- .text          0x00000030      0xb00 main.o
-                0x00000030                multiply
-                0x00000094                tick
-                0x000000a8                mark_pass
-                0x000000cc                mark_fail
-                0x000000ec                test_alu_addition
-                0x000000f4                test_alu_subtraction
-                0x000000fc                test_alu_and
-                0x00000104                test_alu_or
-                0x0000010c                test_alu_xor
-                0x00000114                test_alu_shift_left
-                0x0000011c                test_alu_shift_right_logical
-                0x00000124                test_alu_shift_right_arithmetic
-                0x0000012c                test_alu_set_less_than
-                0x00000134                test_memory_load_store
-                0x000001a4                test_branch_equal
-                0x000001ac                test_branch_not_equal
-                0x000001b4                test_branch_less_than
-                0x000001bc                test_branch_greater_equal
-                0x000001c4                helper_function
-                0x000001cc                test_function_calls
-                0x000001f8                factorial
-                0x00000250                test_recursion
-                0x00000278                test_array_operations
-                0x000002fc                test_pointer_arithmetic
-                0x00000358                test_for_loop
-                0x00000380                test_while_loop
-                0x000003a8                test_fibonacci_algorithm
-                0x00000440                main
-                0x00000b30                        . = ALIGN (0x4)
-                0x00000b30                        _text_end = .
+ .text          0x00000030      0x64c main.o
+                0x00000030                umod
+                0x00000050                random_number
+                0x000000b0                delay
+                0x000000dc                game_init
+                0x000001c8                check_self_collision
+                0x00000220                check_wall_collision
+                0x00000244                spawn_food
+                0x00000310                get_input
+                0x0000031c                game_update
+                0x00000540                game_render
+                0x00000614                main
+                0x0000067c                        . = ALIGN (0x4)
+                0x0000067c                        _text_end = .
 
-.rela.dyn       0x00000b30        0x0
+.rela.dyn       0x0000067c        0x0
  .rela.text.init
-                0x00000b30        0x0 crt0.o
+                0x0000067c        0x0 crt0.o
 
-.rodata         0x00000b30        0x0
-                0x00000b30                        _rodata_start = .
+.rodata         0x0000067c        0x0
+                0x0000067c                        _rodata_start = .
  *(.rodata .rodata.*)
  *(.srodata .srodata.*)
-                0x00000b30                        . = ALIGN (0x4)
-                0x00000b30                        _rodata_end = .
+                0x0000067c                        . = ALIGN (0x4)
+                0x0000067c                        _rodata_end = .
 
-.data           0x00000b30        0x0
-                0x00000b30                        _data_start = .
+.data           0x0000067c        0x4
+                0x0000067c                        _data_start = .
  *(.data .data.*)
  *(.sdata .sdata.*)
-                0x00000b30                        . = ALIGN (0x4)
-                0x00000b30                        _data_end = .
+ .sdata         0x0000067c        0x4 main.o
+                0x00000680                        . = ALIGN (0x4)
+                0x00000680                        _data_end = .
 
-.bss            0x00000b30        0x4
-                0x00000b30                        _bss_start = .
+.bss            0x00000680      0x214
+                0x00000680                        _bss_start = .
  *(.bss .bss.*)
+ .bss           0x00000680      0x214 main.o
+                0x00000680                game
  *(.sbss .sbss.*)
- .sbss          0x00000b30        0x4 main.o
-                0x00000b30                cycle_counter
  *(COMMON)
-                0x00000b34                        . = ALIGN (0x4)
-                0x00000b34                        _bss_end = .
-                0x00000b40                        . = ALIGN (0x10)
-                0x00000b40                        _heap_start = .
+                0x00000894                        . = ALIGN (0x4)
+                0x00000894                        _bss_end = .
+                0x000008a0                        . = ALIGN (0x10)
+                0x000008a0                        _heap_start = .
                 0x0000f000                        _heap_end = ((ORIGIN (RAM) + LENGTH (RAM)) - _stack_size)
                 0x0000f000                        _stack_bottom = ((ORIGIN (RAM) + LENGTH (RAM)) - _stack_size)
                 0x00010000                        _stack_top = (ORIGIN (RAM) + LENGTH (RAM))
@@ -106,32 +89,32 @@ LOAD main.o
  *(.riscv.attributes)
 OUTPUT(main.elf elf32-littleriscv)
 
-.debug_info     0x00000000      0x912
- .debug_info    0x00000000      0x912 main.o
+.debug_info     0x00000000      0x4a6
+ .debug_info    0x00000000      0x4a6 main.o
 
-.debug_abbrev   0x00000000      0x2c0
- .debug_abbrev  0x00000000      0x2c0 main.o
+.debug_abbrev   0x00000000      0x210
+ .debug_abbrev  0x00000000      0x210 main.o
 
 .debug_loclists
-                0x00000000      0x1c7
+                0x00000000      0x1ea
  .debug_loclists
-                0x00000000      0x1c7 main.o
+                0x00000000      0x1ea main.o
 
 .debug_aranges  0x00000000       0x20
  .debug_aranges
                 0x00000000       0x20 main.o
 
 .debug_rnglists
-                0x00000000       0x2c
+                0x00000000       0x2d
  .debug_rnglists
-                0x00000000       0x2c main.o
+                0x00000000       0x2d main.o
 
-.debug_line     0x00000000     0x1816
- .debug_line    0x00000000     0x1816 main.o
+.debug_line     0x00000000      0xa66
+ .debug_line    0x00000000      0xa66 main.o
 
-.debug_str      0x00000000      0x448
- .debug_str     0x00000000      0x448 main.o
-                                0x455 (size before relaxing)
+.debug_str      0x00000000      0x1b9
+ .debug_str     0x00000000      0x1b9 main.o
+                                0x1d1 (size before relaxing)
 
 .debug_line_str
                 0x00000000        0xd
@@ -139,5 +122,5 @@ OUTPUT(main.elf elf32-littleriscv)
                 0x00000000        0xd main.o
                                  0x21 (size before relaxing)
 
-.debug_frame    0x00000000      0x23c
- .debug_frame   0x00000000      0x23c main.o
+.debug_frame    0x00000000      0x10c
+ .debug_frame   0x00000000      0x10c main.o

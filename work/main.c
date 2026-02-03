@@ -1,668 +1,257 @@
-/* test_suite.c - Suite Completa de Testes para RISC-V 32I */
+// Mapeamento de memória
+#define DISPLAY_BASE 0x00000400 // Base para display de LEDs
+#define INPUT_BASE 0x00000500   // Base para entrada (botões)
+#define TIMER_BASE 0x00000600   // Timer para controle de velocidade
 
-/* ============================================
-   MAPA DE MEMÓRIA
-   ============================================
-   0x100 - 0x1FF: Resultados dos Testes
-   0x200 - 0x2FF: Dados de Debug
-   0x300 - 0x3FF: Arrays de Teste
-   0x400 - 0x4FF: Relatório Final
-   ============================================ */
+// Registradores de I/O
+#define DISPLAY_ADDR ((volatile unsigned int *)DISPLAY_BASE)
+#define INPUT_ADDR ((volatile unsigned int *)INPUT_BASE)
+#define TIMER_ADDR ((volatile unsigned int *)TIMER_BASE)
 
-#define TEST_RESULTS_BASE 0x00000100
-#define DEBUG_DATA_BASE 0x00000200
-#define TEST_ARRAYS_BASE 0x00000300
-#define REPORT_BASE 0x00000400
+// Configurações do jogo
+#define GRID_WIDTH 16
+#define GRID_HEIGHT 16
+#define MAX_SNAKE_LENGTH (GRID_WIDTH * GRID_HEIGHT)
 
-/* Estrutura do Relatório */
+// Direções
+typedef enum {
+  DIR_UP = 0,
+  DIR_RIGHT = 1,
+  DIR_DOWN = 2,
+  DIR_LEFT = 3
+} Direction;
+
+// Posição
 typedef struct {
-  int total_tests;
-  int passed_tests;
-  int failed_tests;
-  int test_alu_add;
-  int test_alu_sub;
-  int test_alu_and;
-  int test_alu_or;
-  int test_alu_xor;
-  int test_alu_sll;
-  int test_alu_srl;
-  int test_alu_sra;
-  int test_alu_slt;
-  int test_memory_lw;
-  int test_memory_sw;
-  int test_branch_beq;
-  int test_branch_bne;
-  int test_branch_blt;
-  int test_branch_bge;
-  int test_jump_jal;
-  int test_function_call;
-  int test_recursion;
-  int test_array_access;
-  int test_pointer_arithmetic;
-  int test_loop_for;
-  int test_loop_while;
-  int timestamp_start;
-  int timestamp_end;
-  int cycles_estimated;
-} TestReport;
+  unsigned char x;
+  unsigned char y;
+} Position;
+
+// Estado do jogo
+typedef struct {
+  Position snake[MAX_SNAKE_LENGTH];
+  unsigned int length;
+  Direction direction;
+  Position food;
+  unsigned int score;
+  unsigned int game_over;
+} GameState;
+
+// Estado do jogo
+GameState game;
+
+// Seed para gerador de números aleatórios
+static unsigned int rand_seed = 12345;
 
 /* ============================================
-   FUNÇÃO AUXILIAR: MULTIPLICAÇÃO POR SOMA
-   (RV32I não tem instrução MUL)
-   ============================================ */
-int multiply(int a, int b) {
-  /* Casos especiais para otimização */
+ *   FUNÇÃO AUXILIAR: MÓDULO UNSIGNED
+ *   (RV32I não tem instrução DIV/MOD)
+ *   ============================================ */
+unsigned int umod(unsigned int a, unsigned int b) {
   if (b == 0)
-    return 0;
-  if (b == 1)
+    return 0; // Evita divisão por zero
+  if (a < b)
     return a;
-  if (b == -1)
-    return -a;
 
-  int resultado = 0;
-  int negativo = 0;
-
-  /* Trata números negativos */
-  if (b < 0) {
-    negativo = 1;
-    b = -b;
+  // Subtração repetida
+  while (a >= b) {
+    a = a - b;
   }
-
-  /* Multiplica por soma repetida */
-  for (int i = 0; i < b; i++) {
-    resultado = resultado + a;
-  }
-
-  /* Ajusta sinal */
-  if (negativo) {
-    resultado = -resultado;
-  }
-
-  return resultado;
+  return a;
 }
 
-/* ============================================
-   FUNÇÕES AUXILIARES
-   ============================================ */
-
-/* Simula contador de ciclos (incrementa sempre que chamado) */
-volatile int cycle_counter = 0;
-void tick(void) { cycle_counter++; }
-
-/* Marca sucesso/falha de teste */
-void mark_pass(volatile int *result) {
-  *result = 1;
-  tick();
-}
-void mark_fail(volatile int *result) {
-  *result = 0;
-  tick();
+// Gerador de números pseudo-aleatórios simples (LCG)
+unsigned int random_number(void) {
+  rand_seed = (rand_seed * 1103515245 + 12345) & 0x7FFFFFFF;
+  return rand_seed;
 }
 
-/* ============================================
-   TESTES DA ALU - OPERAÇÕES ARITMÉTICAS
-   ============================================ */
+// Delay simples (ajuste conforme clock do processador)
+void delay(unsigned int cycles) {
+  for (volatile unsigned int i = 0; i < cycles; i++) {
+    asm volatile("nop");
+  }
+}
 
-int test_alu_addition(void) {
-  /* Testa: ADD, ADDI */
-  int a = 10;
-  int b = 20;
-  int result = a + b;
+// Inicializa o jogo
+void game_init(void) {
+  // Limpa tudo
+  for (int i = 0; i < MAX_SNAKE_LENGTH; i++) {
+    game.snake[i].x = 0;
+    game.snake[i].y = 0;
+  }
 
-  if (result == 30) {
-    /* Testa overflow */
-    int max = 0x7FFFFFFF;
-    int overflow = max + 1;
-    if (overflow == 0x80000000) {
-      return 1; /* PASS */
+  // Posição inicial da cobra (centro)
+  game.snake[0].x = GRID_WIDTH / 2;
+  game.snake[0].y = GRID_HEIGHT / 2;
+  game.length = 3;
+
+  // Corpo inicial
+  for (unsigned int i = 1; i < game.length; i++) {
+    game.snake[i].x = game.snake[0].x - i;
+    game.snake[i].y = game.snake[0].y;
+  }
+
+  // Direção inicial
+  game.direction = DIR_RIGHT;
+
+  // Comida inicial - USANDO umod() em vez de %
+  game.food.x = umod(random_number(), (GRID_WIDTH - 2)) + 1;
+  game.food.y = umod(random_number(), (GRID_HEIGHT - 2)) + 1;
+
+  game.score = 0;
+  game.game_over = 0;
+}
+
+// Verifica colisão com a própria cobra
+int check_self_collision(unsigned char x, unsigned char y) {
+  for (unsigned int i = 1; i < game.length; i++) {
+    if (game.snake[i].x == x && game.snake[i].y == y) {
+      return 1;
     }
   }
-  return 0; /* FAIL */
-}
-
-int test_alu_subtraction(void) {
-  /* Testa: SUB */
-  int a = 50;
-  int b = 20;
-  int result = a - b;
-
-  if (result == 30) {
-    /* Testa underflow */
-    int min = 0x80000000;
-    int underflow = min - 1;
-    if (underflow == 0x7FFFFFFF) {
-      return 1; /* PASS */
-    }
-  }
-  return 0; /* FAIL */
-}
-
-/* ============================================
-   TESTES DA ALU - OPERAÇÕES LÓGICAS
-   ============================================ */
-
-int test_alu_and(void) {
-  /* Testa: AND, ANDI */
-  int a = 0b11110000;
-  int b = 0b10101010;
-  int result = a & b;
-
-  return (result == 0b10100000) ? 1 : 0;
-}
-
-int test_alu_or(void) {
-  /* Testa: OR, ORI */
-  int a = 0b11110000;
-  int b = 0b10101010;
-  int result = a | b;
-
-  return (result == 0b11111010) ? 1 : 0;
-}
-
-int test_alu_xor(void) {
-  /* Testa: XOR, XORI */
-  int a = 0b11110000;
-  int b = 0b10101010;
-  int result = a ^ b;
-
-  return (result == 0b01011010) ? 1 : 0;
-}
-
-/* ============================================
-   TESTES DA ALU - SHIFTS
-   ============================================ */
-
-int test_alu_shift_left(void) {
-  /* Testa: SLL, SLLI */
-  int a = 0x00000001;
-  int result = a << 4;
-
-  if (result == 0x00000010) {
-    /* Testa shift por 31 */
-    int b = 1 << 31;
-    if (b == 0x80000000) {
-      return 1; /* PASS */
-    }
-  }
-  return 0; /* FAIL */
-}
-
-int test_alu_shift_right_logical(void) {
-  /* Testa: SRL, SRLI */
-  int a = 0x80000000;
-  unsigned int ua = (unsigned int)a;
-  unsigned int result = ua >> 4;
-
-  return (result == 0x08000000) ? 1 : 0;
-}
-
-int test_alu_shift_right_arithmetic(void) {
-  /* Testa: SRA, SRAI */
-  int a = 0x80000000; /* Negativo */
-  int result = a >> 4;
-
-  /* Deve preservar sinal (preencher com 1s) */
-  return (result == 0xF8000000) ? 1 : 0;
-}
-
-/* ============================================
-   TESTES DA ALU - COMPARAÇÃO
-   ============================================ */
-
-int test_alu_set_less_than(void) {
-  /* Testa: SLT, SLTI */
-  int a = 10;
-  int b = 20;
-  int result = (a < b) ? 1 : 0;
-
-  if (result == 1) {
-    /* Testa com negativos */
-    int neg = -5;
-    int pos = 5;
-    int result2 = (neg < pos) ? 1 : 0;
-    if (result2 == 1) {
-      return 1; /* PASS */
-    }
-  }
-  return 0; /* FAIL */
-}
-
-/* ============================================
-   TESTES DE MEMÓRIA
-   ============================================ */
-
-int test_memory_load_store(void) {
-  /* Testa: LW, SW */
-  volatile int *test_addr = (volatile int *)TEST_ARRAYS_BASE;
-
-  /* Escreve valores */
-  test_addr[0] = 0x12345678;
-  test_addr[1] = 0xDEADBEEF;
-  test_addr[2] = 0xCAFEBABE;
-
-  /* Lê e verifica */
-  if (test_addr[0] != 0x12345678)
-    return 0;
-  if (test_addr[1] != 0xDEADBEEF)
-    return 0;
-  if (test_addr[2] != 0xCAFEBABE)
-    return 0;
-
-  return 1; /* PASS */
-}
-
-/* ============================================
-   TESTES DE BRANCHES
-   ============================================ */
-
-int test_branch_equal(void) {
-  /* Testa: BEQ */
-  int a = 42;
-  int b = 42;
-  int result = 0;
-
-  if (a == b) {
-    result = 1;
-  }
-
-  return result;
-}
-
-int test_branch_not_equal(void) {
-  /* Testa: BNE */
-  int a = 10;
-  int b = 20;
-  int result = 0;
-
-  if (a != b) {
-    result = 1;
-  }
-
-  return result;
-}
-
-int test_branch_less_than(void) {
-  /* Testa: BLT */
-  int a = 10;
-  int b = 20;
-  int result = 0;
-
-  if (a < b) {
-    result = 1;
-  }
-
-  /* Testa com negativos */
-  int neg = -5;
-  int pos = 5;
-  int result2 = 0;
-
-  if (neg < pos) {
-    result2 = 1;
-  }
-
-  return (result && result2) ? 1 : 0;
-}
-
-int test_branch_greater_equal(void) {
-  /* Testa: BGE */
-  int a = 20;
-  int b = 10;
-  int result = 0;
-
-  if (a >= b) {
-    result = 1;
-  }
-
-  return result;
-}
-
-/* ============================================
-   TESTES DE JUMPS E FUNÇÕES
-   ============================================ */
-
-int helper_function(int x, int y) {
-  /* Testa passagem de parâmetros (a0, a1) */
-  return x + y;
-}
-
-int test_function_calls(void) {
-  /* Testa: JAL, JALR */
-  int result = helper_function(10, 20);
-
-  return (result == 30) ? 1 : 0;
-}
-
-/* ============================================
-   FATORIAL ITERATIVO (SEM RECURSÃO)
-   Para evitar stack overflow e multiplicação
-   ============================================ */
-int factorial(int n) {
-  if (n <= 1) {
-    return 1;
-  }
-
-  int resultado = 1;
-
-  /* Calcula fatorial usando multiplicação por soma */
-  for (int i = 2; i <= n; i++) {
-    resultado = multiply(resultado, i);
-  }
-
-  return resultado;
-}
-
-int test_recursion(void) {
-  /* Testa fatorial (agora iterativo) */
-  int result = factorial(5); /* 5! = 120 */
-
-  return (result == 120) ? 1 : 0;
-}
-
-/* ============================================
-   TESTES DE ARRAYS E PONTEIROS
-   ============================================ */
-
-int test_array_operations(void) {
-  volatile int *arr = (volatile int *)TEST_ARRAYS_BASE;
-
-  /* Preenche array usando multiply() */
-  for (int i = 0; i < 10; i++) {
-    arr[i] = multiply(i, i); /* 0, 1, 4, 9, 16, ... */
-  }
-
-  /* Verifica valores */
-  if (arr[0] != 0)
-    return 0;
-  if (arr[3] != 9)
-    return 0;
-  if (arr[5] != 25)
-    return 0;
-  if (arr[9] != 81)
-    return 0;
-
-  return 1; /* PASS */
-}
-
-int test_pointer_arithmetic(void) {
-  volatile int *base = (volatile int *)TEST_ARRAYS_BASE;
-
-  /* Escreve usando aritmética de ponteiros */
-  volatile int *ptr = base;
-  *ptr = 100;
-  ptr++;
-  *ptr = 200;
-  ptr++;
-  *ptr = 300;
-  ptr++;
-
-  /* Verifica */
-  if (base[0] != 100)
-    return 0;
-  if (base[1] != 200)
-    return 0;
-  if (base[2] != 300)
-    return 0;
-
-  return 1; /* PASS */
-}
-
-/* ============================================
-   TESTES DE LOOPS
-   ============================================ */
-
-int test_for_loop(void) {
-  int sum = 0;
-
-  for (int i = 1; i <= 10; i++) {
-    sum = sum + i;
-  }
-
-  /* 1+2+3+...+10 = 55 */
-  return (sum == 55) ? 1 : 0;
-}
-
-int test_while_loop(void) {
-  int i = 0;
-  int sum = 0;
-
-  while (i < 10) {
-    sum = sum + i;
-    i = i + 1;
-  }
-
-  /* 0+1+2+...+9 = 45 */
-  return (sum == 45) ? 1 : 0;
-}
-
-/* ============================================
-   ALGORITMO COMPLEXO: FIBONACCI
-   ============================================ */
-
-int test_fibonacci_algorithm(void) {
-  volatile int *fib = (volatile int *)(TEST_ARRAYS_BASE + 0x80);
-
-  fib[0] = 0;
-  fib[1] = 1;
-
-  for (int i = 2; i < 10; i++) {
-    fib[i] = fib[i - 1] + fib[i - 2];
-  }
-
-  /* Verifica alguns valores */
-  if (fib[5] != 5)
-    return 0; /* F(5) = 5 */
-  if (fib[7] != 13)
-    return 0; /* F(7) = 13 */
-  if (fib[9] != 34)
-    return 0; /* F(9) = 34 */
-
-  return 1; /* PASS */
-}
-
-/* ============================================
-   FUNÇÃO PRINCIPAL - EXECUTA TODOS OS TESTES
-   ============================================ */
-
-int main(void) {
-  volatile TestReport *report = (volatile TestReport *)REPORT_BASE;
-  volatile int *results = (volatile int *)TEST_RESULTS_BASE;
-
-  /* Inicializa relatório */
-  report->total_tests = 0;
-  report->passed_tests = 0;
-  report->failed_tests = 0;
-  report->timestamp_start = cycle_counter;
-
-  /* ==================================
-     EXECUTA BATERIA DE TESTES
-     ================================== */
-
-  /* Testes ALU - Aritmética */
-  results[0] = test_alu_addition();
-  report->test_alu_add = results[0];
-  report->total_tests++;
-  if (results[0])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  results[1] = test_alu_subtraction();
-  report->test_alu_sub = results[1];
-  report->total_tests++;
-  if (results[1])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  /* Testes ALU - Lógica */
-  results[2] = test_alu_and();
-  report->test_alu_and = results[2];
-  report->total_tests++;
-  if (results[2])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  results[3] = test_alu_or();
-  report->test_alu_or = results[3];
-  report->total_tests++;
-  if (results[3])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  results[4] = test_alu_xor();
-  report->test_alu_xor = results[4];
-  report->total_tests++;
-  if (results[4])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  /* Testes ALU - Shifts */
-  results[5] = test_alu_shift_left();
-  report->test_alu_sll = results[5];
-  report->total_tests++;
-  if (results[5])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  results[6] = test_alu_shift_right_logical();
-  report->test_alu_srl = results[6];
-  report->total_tests++;
-  if (results[6])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  results[7] = test_alu_shift_right_arithmetic();
-  report->test_alu_sra = results[7];
-  report->total_tests++;
-  if (results[7])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  /* Testes ALU - Comparação */
-  results[8] = test_alu_set_less_than();
-  report->test_alu_slt = results[8];
-  report->total_tests++;
-  if (results[8])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  /* Testes Memória */
-  results[9] = test_memory_load_store();
-  report->test_memory_lw = results[9];
-  report->test_memory_sw = results[9];
-  report->total_tests++;
-  if (results[9])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  /* Testes Branch */
-  results[10] = test_branch_equal();
-  report->test_branch_beq = results[10];
-  report->total_tests++;
-  if (results[10])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  results[11] = test_branch_not_equal();
-  report->test_branch_bne = results[11];
-  report->total_tests++;
-  if (results[11])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  results[12] = test_branch_less_than();
-  report->test_branch_blt = results[12];
-  report->total_tests++;
-  if (results[12])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  results[13] = test_branch_greater_equal();
-  report->test_branch_bge = results[13];
-  report->total_tests++;
-  if (results[13])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  /* Testes Jump e Funções */
-  results[14] = test_function_calls();
-  report->test_function_call = results[14];
-  report->test_jump_jal = results[14];
-  report->total_tests++;
-  if (results[14])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  results[15] = test_recursion();
-  report->test_recursion = results[15];
-  report->total_tests++;
-  if (results[15])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  /* Testes Arrays */
-  results[16] = test_array_operations();
-  report->test_array_access = results[16];
-  report->total_tests++;
-  if (results[16])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  results[17] = test_pointer_arithmetic();
-  report->test_pointer_arithmetic = results[17];
-  report->total_tests++;
-  if (results[17])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  /* Testes Loops */
-  results[18] = test_for_loop();
-  report->test_loop_for = results[18];
-  report->total_tests++;
-  if (results[18])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  results[19] = test_while_loop();
-  report->test_loop_while = results[19];
-  report->total_tests++;
-  if (results[19])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  /* Teste Algoritmo Complexo */
-  results[20] = test_fibonacci_algorithm();
-  report->total_tests++;
-  if (results[20])
-    report->passed_tests++;
-  else
-    report->failed_tests++;
-
-  /* Finaliza relatório */
-  report->timestamp_end = cycle_counter;
-  report->cycles_estimated = cycle_counter;
-
-  /* Loop infinito */
-
   return 0;
+}
 
-  // opa
+// Verifica colisão com parede
+int check_wall_collision(unsigned char x, unsigned char y) {
+  return (x >= GRID_WIDTH || y >= GRID_HEIGHT);
+}
+
+// Atualiza posição da comida
+void spawn_food(void) {
+  int valid = 0;
+  while (!valid) {
+    // USANDO umod() em vez de %
+    game.food.x = umod(random_number(), (GRID_WIDTH - 2)) + 1;
+    game.food.y = umod(random_number(), (GRID_HEIGHT - 2)) + 1;
+
+    // Verifica se não está na cobra
+    valid = 1;
+    for (unsigned int i = 0; i < game.length; i++) {
+      if (game.snake[i].x == game.food.x && game.snake[i].y == game.food.y) {
+        valid = 0;
+        break;
+      }
+    }
+  }
+}
+
+// Lê entrada (4 botões: UP, RIGHT, DOWN, LEFT)
+unsigned int get_input(void) { return *INPUT_ADDR & 0x0F; }
+
+// Atualiza lógica do jogo
+void game_update(void) {
+  if (game.game_over)
+    return;
+
+  // Lê entrada
+  unsigned int input = get_input();
+
+  // Atualiza direção (não pode reverter)
+  if (input & (1 << DIR_UP) && game.direction != DIR_DOWN) {
+    game.direction = DIR_UP;
+  } else if (input & (1 << DIR_RIGHT) && game.direction != DIR_LEFT) {
+    game.direction = DIR_RIGHT;
+  } else if (input & (1 << DIR_DOWN) && game.direction != DIR_UP) {
+    game.direction = DIR_DOWN;
+  } else if (input & (1 << DIR_LEFT) && game.direction != DIR_RIGHT) {
+    game.direction = DIR_LEFT;
+  }
+
+  // Calcula nova posição da cabeça
+  unsigned char new_x = game.snake[0].x;
+  unsigned char new_y = game.snake[0].y;
+
+  switch (game.direction) {
+  case DIR_UP:
+    new_y--;
+    break;
+  case DIR_DOWN:
+    new_y++;
+    break;
+  case DIR_LEFT:
+    new_x--;
+    break;
+  case DIR_RIGHT:
+    new_x++;
+    break;
+  }
+
+  // Verifica colisões
+  if (check_wall_collision(new_x, new_y) ||
+      check_self_collision(new_x, new_y)) {
+    game.game_over = 1;
+    return;
+  }
+
+  // Move o corpo
+  for (int i = game.length - 1; i > 0; i--) {
+    game.snake[i] = game.snake[i - 1];
+  }
+
+  // Atualiza cabeça
+  game.snake[0].x = new_x;
+  game.snake[0].y = new_y;
+
+  // Verifica se comeu
+  if (new_x == game.food.x && new_y == game.food.y) {
+    if (game.length < MAX_SNAKE_LENGTH) {
+      game.length++;
+      game.score += 10;
+    }
+    spawn_food();
+  }
+}
+
+// Renderiza o jogo na memória de display
+void game_render(void) {
+  // Limpa display (256 words para 16x16 grid, 1 bit por pixel)
+  // Usando 16 words de 16 bits cada (1 word por linha)
+  for (int i = 0; i < GRID_HEIGHT; i++) {
+    DISPLAY_ADDR[i] = 0;
+  }
+
+  // Desenha cobra
+  for (unsigned int i = 0; i < game.length; i++) {
+    unsigned char x = game.snake[i].x;
+    unsigned char y = game.snake[i].y;
+
+    if (x < GRID_WIDTH && y < GRID_HEIGHT) {
+      DISPLAY_ADDR[y] |= (1 << x);
+    }
+  }
+
+  // Desenha comida (piscando - bit mais alto indica blink)
+  if (game.food.x < GRID_WIDTH && game.food.y < GRID_HEIGHT) {
+    DISPLAY_ADDR[game.food.y] |= (1 << game.food.x);
+  }
+
+  // Escreve score em endereço separado
+  DISPLAY_ADDR[GRID_HEIGHT] = game.score;
+
+  // Game over flag
+  DISPLAY_ADDR[GRID_HEIGHT + 1] = game.game_over;
+}
+
+// Função main
+int main(void) {
+  // Inicializa jogo
+  game_init();
+
+  // Loop principal
+  while (1) {
+    game_update();
+    game_render();
+    delay(50000); // Ajuste para velocidade desejada
+
+    // Reinicia se game over e botão pressionado
+    if (game.game_over) {
+      delay(200000); // Pausa antes de permitir restart
+      if (get_input()) {
+        game_init();
+      }
+    }
+  }
+  return 0;
 }
