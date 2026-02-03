@@ -7,6 +7,7 @@ Discarded input sections
  .riscv.attributes
                 0x00000000       0x1a crt0.o
  .data          0x00000000        0x0 main.o
+ .bss           0x00000000        0x0 main.o
  .comment       0x00000000       0x34 main.o
  .riscv.attributes
                 0x00000000       0x1c main.o
@@ -23,60 +24,45 @@ LOAD crt0.o
 LOAD main.o
                 0x00001000                        _stack_size = 0x1000
 
-.text           0x00000000      0x894
+.text           0x00000000      0x1a0
                 0x00000000                        _text_start = .
  *(.text.init)
  .text.init     0x00000000       0x30 crt0.o
                 0x00000000                _start
  *(.text .text.*)
- .text          0x00000030      0x864 main.o
-                0x00000030                umod
-                0x00000050                random_number
-                0x000000b0                delay
-                0x000000dc                draw_pixel
-                0x000000fc                clear_screen
-                0x00000138                draw_rect
-                0x000001d0                game_init
-                0x000002cc                check_self_collision
-                0x00000324                check_wall_collision
-                0x00000348                spawn_food
-                0x00000414                get_input
-                0x00000424                game_update
-                0x000006b4                game_render
-                0x0000082c                main
-                0x00000894                        . = ALIGN (0x4)
-                0x00000894                        _text_end = .
+ .text          0x00000030      0x170 main.o
+                0x00000030                desenha
+                0x0000005c                main
+                0x000001a0                        . = ALIGN (0x4)
+                0x000001a0                        _text_end = .
 
-.rela.dyn       0x00000894        0x0
+.rela.dyn       0x000001a0        0x0
  .rela.text.init
-                0x00000894        0x0 crt0.o
+                0x000001a0        0x0 crt0.o
 
-.rodata         0x00000894        0x0
-                0x00000894                        _rodata_start = .
+.rodata         0x000001a0        0x0
+                0x000001a0                        _rodata_start = .
  *(.rodata .rodata.*)
  *(.srodata .srodata.*)
-                0x00000894                        . = ALIGN (0x4)
-                0x00000894                        _rodata_end = .
+                0x000001a0                        . = ALIGN (0x4)
+                0x000001a0                        _rodata_end = .
 
-.data           0x00000894        0x4
-                0x00000894                        _data_start = .
+.data           0x000001a0        0x0
+                0x000001a0                        _data_start = .
  *(.data .data.*)
  *(.sdata .sdata.*)
- .sdata         0x00000894        0x4 main.o
-                0x00000898                        . = ALIGN (0x4)
-                0x00000898                        _data_end = .
+                0x000001a0                        . = ALIGN (0x4)
+                0x000001a0                        _data_end = .
 
-.bss            0x00000898      0x218
-                0x00000898                        _bss_start = .
+.bss            0x000001a0        0x0
+                0x000001a0                        _bss_start = .
  *(.bss .bss.*)
- .bss           0x00000898      0x218 main.o
-                0x00000898                game
  *(.sbss .sbss.*)
  *(COMMON)
-                0x00000ab0                        . = ALIGN (0x4)
-                0x00000ab0                        _bss_end = .
-                0x00000ab0                        . = ALIGN (0x10)
-                0x00000ab0                        _heap_start = .
+                0x000001a0                        . = ALIGN (0x4)
+                0x000001a0                        _bss_end = .
+                0x000001a0                        . = ALIGN (0x10)
+                0x000001a0                        _heap_start = .
                 0x0000f000                        _heap_end = ((ORIGIN (RAM) + LENGTH (RAM)) - _stack_size)
                 0x0000f000                        _stack_bottom = ((ORIGIN (RAM) + LENGTH (RAM)) - _stack_size)
                 0x00010000                        _stack_top = (ORIGIN (RAM) + LENGTH (RAM))
@@ -92,32 +78,32 @@ LOAD main.o
  *(.riscv.attributes)
 OUTPUT(main.elf elf32-littleriscv)
 
-.debug_info     0x00000000      0x727
- .debug_info    0x00000000      0x727 main.o
+.debug_info     0x00000000      0x174
+ .debug_info    0x00000000      0x174 main.o
 
-.debug_abbrev   0x00000000      0x2cf
- .debug_abbrev  0x00000000      0x2cf main.o
+.debug_abbrev   0x00000000       0xfc
+ .debug_abbrev  0x00000000       0xfc main.o
 
 .debug_loclists
-                0x00000000      0x32e
+                0x00000000       0x81
  .debug_loclists
-                0x00000000      0x32e main.o
+                0x00000000       0x81 main.o
 
 .debug_aranges  0x00000000       0x20
  .debug_aranges
                 0x00000000       0x20 main.o
 
 .debug_rnglists
-                0x00000000       0x4e
+                0x00000000       0x17
  .debug_rnglists
-                0x00000000       0x4e main.o
+                0x00000000       0x17 main.o
 
-.debug_line     0x00000000      0xcb3
- .debug_line    0x00000000      0xcb3 main.o
+.debug_line     0x00000000      0x3f7
+ .debug_line    0x00000000      0x3f7 main.o
 
-.debug_str      0x00000000      0x215
- .debug_str     0x00000000      0x215 main.o
-                                0x233 (size before relaxing)
+.debug_str      0x00000000       0xd8
+ .debug_str     0x00000000       0xd8 main.o
+                                 0xe5 (size before relaxing)
 
 .debug_line_str
                 0x00000000        0xd
@@ -125,5 +111,5 @@ OUTPUT(main.elf elf32-littleriscv)
                 0x00000000        0xd main.o
                                  0x21 (size before relaxing)
 
-.debug_frame    0x00000000      0x184
- .debug_frame   0x00000000      0x184 main.o
+.debug_frame    0x00000000       0x38
+ .debug_frame   0x00000000       0x38 main.o
