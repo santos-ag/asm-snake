@@ -1,33 +1,30 @@
-// Jogo da Cobrinha - Versão de Teste (só movimentação)
+// Jogo da Cobrinha - Uma tecla por vez (edge detection)
 
-// Registradores de memória
 #define REG_COR (*(volatile unsigned char *)0x200)
 #define REG_X (*(volatile unsigned char *)0x204)
 #define REG_Y (*(volatile unsigned char *)0x208)
 #define REG_RESET (*(volatile unsigned char *)0x20C)
 #define REG_CLOCK (*(volatile unsigned char *)0x210)
-#define REG_INPUT (*(volatile unsigned char *)0x214)  // LEITURA dos botões
+#define REG_INPUT (*(volatile unsigned char *)0x214)
 
-// Cores
 #define COR_VERDE 0x1C
 #define COR_PRETO 0x00
-
-// Tamanho fixo da cobra
 #define TAMANHO 4
 
-// Direções
 #define DIR_CIMA    0
 #define DIR_BAIXO   1
 #define DIR_ESQ     2
 #define DIR_DIR     3
 
-// Botões (bits do REG_INPUT)
-#define BTN_CIMA    0x01  // bit 0
-#define BTN_BAIXO   0x02  // bit 1
-#define BTN_ESQ     0x04  // bit 2
-#define BTN_DIR     0x08  // bit 3
+#define TECLA_W     87
+#define TECLA_w     119
+#define TECLA_S     83
+#define TECLA_s     115
+#define TECLA_A     65
+#define TECLA_a     97
+#define TECLA_D     68
+#define TECLA_d     100
 
-// Função para desenhar pixel
 void desenha(unsigned char x, unsigned char y, unsigned char cor) {
   REG_COR = cor;
   REG_X = x & 0x0F;
@@ -38,67 +35,73 @@ void desenha(unsigned char x, unsigned char y, unsigned char cor) {
 }
 
 void main(void) {
-  // Arrays da cobra
   unsigned char px[TAMANHO];
   unsigned char py[TAMANHO];
-  
   unsigned char i;
-  unsigned char direcao = DIR_DIR;  // Começa indo para direita
-  unsigned char tecla;
+  unsigned char direcao = DIR_DIR;
+  unsigned char tecla_atual;
+  unsigned char tecla_anterior = 0;  // ← NOVO: guarda última tecla
   unsigned char rabo_x, rabo_y;
 
-  // ========== RESET DA TELA ==========
+  // Reset da tela
   REG_CLOCK = 0x00;
   REG_RESET = 0x01;
   REG_RESET = 0x00;
 
-  // ========== INICIALIZA COBRA (horizontal no centro) ==========
-  px[0] = 7;  py[0] = 7;  // Cabeça
+  // Inicializa cobra
+  px[0] = 7;  py[0] = 7;
   px[1] = 6;  py[1] = 7;
   px[2] = 5;  py[2] = 7;
-  px[3] = 4;  py[3] = 7;  // Rabo
+  px[3] = 4;  py[3] = 7;
 
-  // Desenha cobra inicial
   for (i = 0; i < TAMANHO; i++) {
     desenha(px[i], py[i], COR_VERDE);
   }
 
-  // ========== LOOP PRINCIPAL ==========
+  // Loop principal
   while (1) {
-    
-    // Delay (ajuste conforme necessário)
     for (volatile unsigned int d = 0; d < 50000; d++);
 
-    // ========== LÊ OS BOTÕES ==========
-    tecla = REG_INPUT;
+    // Lê tecla
+    tecla_atual = REG_INPUT & 0x7F;
 
-    // Atualiza direção (impede voltar para direção oposta)
-    if ((tecla & BTN_CIMA) && direcao != DIR_BAIXO) {
-      direcao = DIR_CIMA;
+    // ========== SÓ PROCESSA SE A TECLA MUDOU! ==========
+    if (tecla_atual != tecla_anterior && tecla_atual != 0) {
+      
+      // Atualiza direção
+      if ((tecla_atual == TECLA_W || tecla_atual == TECLA_w) && direcao != DIR_BAIXO) {
+        direcao = DIR_CIMA;
+      }
+      else if ((tecla_atual == TECLA_S || tecla_atual == TECLA_s) && direcao != DIR_CIMA) {
+        direcao = DIR_BAIXO;
+      }
+      else if ((tecla_atual == TECLA_A || tecla_atual == TECLA_a) && direcao != DIR_DIR) {
+        direcao = DIR_ESQ;
+      }
+      else if ((tecla_atual == TECLA_D || tecla_atual == TECLA_d) && direcao != DIR_ESQ) {
+        direcao = DIR_DIR;
+      }
+      
+      // Guarda a tecla processada
+      tecla_anterior = tecla_atual;
     }
-    else if ((tecla & BTN_BAIXO) && direcao != DIR_CIMA) {
-      direcao = DIR_BAIXO;
-    }
-    else if ((tecla & BTN_ESQ) && direcao != DIR_DIR) {
-      direcao = DIR_ESQ;
-    }
-    else if ((tecla & BTN_DIR) && direcao != DIR_ESQ) {
-      direcao = DIR_DIR;
+    
+    // Se nenhuma tecla está pressionada, reseta
+    if (tecla_atual == 0) {
+      tecla_anterior = 0;
     }
 
-    // Salva posição do rabo (para apagar)
+    // Move a cobra (independente da tecla)
     rabo_x = px[TAMANHO - 1];
     rabo_y = py[TAMANHO - 1];
 
-    // Move o corpo (cada segmento vai para posição do anterior)
     for (i = TAMANHO - 1; i > 0; i--) {
       px[i] = px[i - 1];
       py[i] = py[i - 1];
     }
 
-    // Move a cabeça na direção atual
     if (direcao == DIR_CIMA) {
-      py[0] = (py[0] == 0) ? 15 : py[0] - 1;  // Wrap around
+      py[0] = (py[0] == 0) ? 15 : py[0] - 1;
     }
     else if (direcao == DIR_BAIXO) {
       py[0] = (py[0] == 15) ? 0 : py[0] + 1;
@@ -110,10 +113,7 @@ void main(void) {
       px[0] = (px[0] == 15) ? 0 : px[0] + 1;
     }
 
-    // Apaga o rabo antigo
     desenha(rabo_x, rabo_y, COR_PRETO);
-
-    // Desenha a nova cabeça
     desenha(px[0], py[0], COR_VERDE);
   }
 }
