@@ -40,7 +40,7 @@ void main(void) {
   unsigned char i;
   unsigned char direcao = DIR_DIR;
   unsigned char tecla_atual;
-  unsigned char tecla_anterior = 0;  // ← NOVO: guarda última tecla
+  unsigned char tecla_anterior = 0;  // ← guarda última tecla
   unsigned char rabo_x, rabo_y;
 
   // Reset da tela
