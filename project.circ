@@ -503,7 +503,6 @@
       <a name="facing" val="north"/>
       <a name="size" val="30"/>
     </comp>
-    <comp lib="10" loc="(1070,200)" name="Slider"/>
     <comp lib="3" loc="(1060,340)" name="Comparator">
       <a name="width" val="32"/>
     </comp>
@@ -2973,13 +2972,13 @@
     </comp>
     <comp lib="0" loc="(1050,600)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="label" val="Reset"/>
-    </comp>
-    <comp lib="0" loc="(1050,600)" name="Pin">
-      <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="R"/>
       <a name="type" val="output"/>
+    </comp>
+    <comp lib="0" loc="(1050,600)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="label" val="Reset"/>
     </comp>
     <comp lib="0" loc="(1090,510)" name="Tunnel">
       <a name="facing" val="east"/>
@@ -3007,13 +3006,13 @@
     </comp>
     <comp lib="0" loc="(1340,660)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="facing" val="west"/>
-      <a name="label" val="ck"/>
-      <a name="type" val="output"/>
+      <a name="label" val="clk"/>
     </comp>
     <comp lib="0" loc="(1340,660)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="label" val="clk"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="ck"/>
+      <a name="type" val="output"/>
     </comp>
     <comp lib="0" loc="(1340,920)" name="Tunnel">
       <a name="facing" val="north"/>
@@ -3208,13 +3207,13 @@
     </comp>
     <comp lib="0" loc="(790,940)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="facing" val="west"/>
-      <a name="label" val="mw"/>
-      <a name="type" val="output"/>
+      <a name="label" val="MemWrite"/>
     </comp>
     <comp lib="0" loc="(790,940)" name="Pin">
       <a name="appearance" val="NewPins"/>
-      <a name="label" val="MemWrite"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="mw"/>
+      <a name="type" val="output"/>
     </comp>
     <comp lib="0" loc="(860,1170)" name="Tunnel">
       <a name="facing" val="east"/>
@@ -4382,32 +4381,37 @@
       <a name="addrWidth" val="16"/>
       <a name="appearance" val="logisim_evolution"/>
       <a name="contents">addr/data: 16 32
-10137 10113 2b7 33828293 337 34030313 628863 2a023
-428293 ff5ff06f 38000ef 6f ff67613 20c00023 f57513 20a00223
+10137 10113 2b7 3e028293 337 3e830313 628863 2a023
+428293 ff5ff06f 78000ef 6f 7b7 3dc7a503 d51713 e54533
+3ca7ae23 1155713 e54533 3ca7ae23 a5a5a737 5a570713 e50533 3ca7ae23
+551713 e54533 3ca7ae23 f57513 8067 20c02023 f57513 20a00223
 f5f593 20b00423 21000793 78023 100713 e78023 78023 8067
-fe010113 112e23 812c23 912a23 20000823 20c00793 100713 e78023
-78023 737 700693 32d70e23 7b7 32d78c23 33c70713 600613
-c700a3 33878793 d780a3 500613 c70123 d78123 400613 c701a3
-d781a3 413 3c0006f 737 33870713 e40733 7b7 33c78793
-f407b3 10637 f0060613 74583 7c503 97 f3c080e7 140413
-ff47413 300793 fc87f2e3 ff00613 300593 300513 97 f18080e7
-493 300413 1780006f c12783 178793 f12623 c12703 1dcd67b7
-4ff78793 fee7f4e3 21404783 7f7f793 6f48063 4078e63 5700713 4e78263
-7700713 2e78e63 5300713 6e78663 7300713 6e78263 4100713 6e78663
-6100713 6e78263 4400713 6e78863 6400713 6e78463 78493 140006f
-100713 fce402e3 78493 413 79463 78493 7b7 33c78793
-37c503 7b7 33878793 37c583 300793 7c0006f fa0400e3 78493
-100413 fcdff06f 300713 f8e40ee3 78493 200413 fb9ff06f 200713
-e40863 78493 300413 fa5ff06f 78493 f9dff06f fff78693 737
-33c70713 e68633 64603 e78733 c70023 737 33870713 e68633
-64603 e787b3 c78023 ff6f793 fc0794e3 4041e63 7b7 3387c783
-4078463 fff78793 ff7f793 737 32f70c23 613 97 db8080e7
-10637 f0060613 7b7 3387c583 7b7 33c7c503 97 d98080e7
-12623 e95ff06f f00793 fc1ff06f 100713 2e40c63 200713 4e40a63
-300713 fae418e3 737 33c74703 f00693 d70663 170713 ff77793
-737 32f70e23 f8dff06f 737 33874703 f00693 d70663 170713
-ff77793 737 32f70c23 f69ff06f 7b7 33c7c783 78c63 fff78793
-ff7f793 737 32f70e23 f49ff06f f00793 ff1ff06f
+fd010113 2112623 2812423 2912223 3212023 1312e23 1412c23 1512a23
+20000823 20c00793 100713 e78023 78023 97 f5c080e7 50493
+97 f50080e7 50913 737 700693 3ed70223 7b7 3ed78023
+3e470713 600613 c700a3 3e078793 d780a3 500613 c70123 d78123
+400613 c701a3 d781a3 413 3c0006f 737 3e070713 e40733
+7b7 3e478793 f407b3 229637 b2260613 74583 7c503 97
+f18080e7 140413 ff47413 300793 fc87f2e3 993 300413 1ac0006f
+c12783 178793 f12623 c12703 1dcd67b7 4ff78793 fee7f4e3 21404783
+7f7f793 6f98063 4078e63 5700713 4e78263 7700713 2e78e63 5300713
+6e78663 7300713 6e78263 4100713 6e78663 6100713 6e78263 4400713
+6e78863 6400713 6e78463 78993 140006f 100713 fce402e3 78993
+413 79463 78993 7b7 3e478793 37ca03 7b7 3e078793
+37ca83 300793 7c0006f fa0400e3 78993 100413 fcdff06f 300713
+f8e40ee3 78993 200413 fb9ff06f 200713 e40863 78993 300413
+fa5ff06f 78993 f9dff06f fff78693 737 3e470713 e68633 64603
+e78733 c70023 737 3e070713 e68633 64603 e787b3 c78023
+ff6f793 fc0794e3 8041863 7b7 3e07c783 6078e63 fff78793 ff7f793
+737 3ef70023 7b7 3e47c783 979863 7b7 3e07c783 f278263
+ff0637 90593 48513 97 d88080e7 613 a8593 a0513
+97 d74080e7 229637 b2260613 7b7 3e07c583 7b7 3e47c503
+97 d54080e7 12623 e61ff06f f00793 f8dff06f 100713 2e40c63
+200713 4e40a63 300713 f6e41ee3 737 3e474703 f00693 d70663
+170713 ff77793 737 3ef70223 f59ff06f 737 3e074703 f00693
+d70663 170713 ff77793 737 3ef70023 f35ff06f 7b7 3e47c783
+78c63 fff78793 ff7f793 737 3ef70223 f15ff06f f00793 ff1ff06f
+97 c70080e7 50493 97 c64080e7 50913 f09ff06f 1234abcd
 </a>
       <a name="dataWidth" val="32"/>
       <a name="label" val="InstMem"/>

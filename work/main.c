@@ -1,15 +1,15 @@
 // Jogo da Cobrinha - Uma tecla por vez (edge detection)
 
-#define REG_COR (*(volatile unsigned char *)0x200)
+#define REG_COR (*(volatile unsigned int *)0x200)
 #define REG_X (*(volatile unsigned char *)0x204)
 #define REG_Y (*(volatile unsigned char *)0x208)
 #define REG_RESET (*(volatile unsigned char *)0x20C)
 #define REG_CLOCK (*(volatile unsigned char *)0x210)
 #define REG_INPUT (*(volatile unsigned char *)0x214)
 
-#define COR_VERDE 0x0000FF00
-#define COR_PRETO 0x00000000
-#define COR_VERMELHO 0x00FF0000
+#define COR_VERDE 0x228B22
+#define COR_PRETO 0x000000
+#define COR_VERMELHO 0xFF0000
 #define TAMANHO 4
 
 #define DIR_CIMA    0
@@ -29,6 +29,18 @@
 // --- Mover os vetores para escopo global (evita colisão com MMIO na stack) ---
 static unsigned char px[TAMANHO];
 static unsigned char py[TAMANHO];
+
+static unsigned int seed = 0x1234ABCD;
+
+unsigned char random_0_15(void) {
+    // Algoritmo: mistura a seed usando soma, XOR e shifts (bitwise)
+    seed ^= seed << 13;
+    seed ^= seed >> 17;
+    seed += 0xA5A5A5A5; // valor fixo para variar a cada chamada
+    seed ^= seed << 5;
+    // Agora retorna só os 4 bits menos significativos
+    return seed & 0x0F; // retorna [0, 15]
+}
 
 void desenha(unsigned char x, unsigned char y, int cor) {
   REG_COR = cor;
@@ -50,8 +62,10 @@ void main(void) {
   REG_CLOCK = 0x00;
   REG_RESET = 0x01;
   REG_RESET = 0x00;
-  fruit_x = 3;
-  fruit_y = 3;
+
+  fruit_x = random_0_15();
+  fruit_y = random_0_15();
+
   // Inicializa cobra
   px[0] = 7;  py[0] = 7;
   px[1] = 6;  py[1] = 7;
@@ -61,11 +75,11 @@ void main(void) {
   for (i = 0; i < TAMANHO; i++) {
     desenha(px[i], py[i], COR_VERDE);
   }
-  desenha(fruit_x, fruit_y, 0xFF);
+  
   // Loop principal
   while (1) {
     for (volatile unsigned int d = 0; d < 500000000; d++);
-
+    
     // Lê tecla
     tecla_atual = REG_INPUT & 0x7F;
 
@@ -86,6 +100,8 @@ void main(void) {
       tecla_anterior = tecla_atual;
     }
     if (tecla_atual == 0) tecla_anterior = 0;
+
+    
 
     // Grava rabo antes de mover
     rabo_x = px[TAMANHO - 1];
@@ -109,7 +125,11 @@ void main(void) {
     else if (direcao == DIR_DIR) {
       px[0] = (px[0] == 15) ? 0 : px[0] + 1;
     }
-
+    if (px[0] == fruit_x && py[0] == fruit_y) {
+        fruit_x = random_0_15();
+        fruit_y = random_0_15();        
+    }
+    desenha(fruit_x, fruit_y, COR_VERMELHO);
     // Apaga rabo antigo e desenha nova cabeça
     desenha(rabo_x, rabo_y, COR_PRETO);
     desenha(px[0], py[0], COR_VERDE);

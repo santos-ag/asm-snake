@@ -24,46 +24,48 @@ LOAD crt0.o
 LOAD main.o
                 0x00001000                        _stack_size = 0x1000
 
-.text           0x00000000      0x338
+.text           0x00000000      0x3dc
                 0x00000000                        _text_start = .
  *(.text.init)
  .text.init     0x00000000       0x30 crt0.o
                 0x00000000                _start
  *(.text .text.*)
- .text          0x00000030      0x308 main.o
-                0x00000030                desenha
-                0x00000060                main
-                0x00000338                        . = ALIGN (0x4)
-                0x00000338                        _text_end = .
+ .text          0x00000030      0x3ac main.o
+                0x00000030                random_0_15
+                0x00000074                desenha
+                0x000000a0                main
+                0x000003dc                        . = ALIGN (0x4)
+                0x000003dc                        _text_end = .
 
-.rela.dyn       0x00000338        0x0
+.rela.dyn       0x000003dc        0x0
  .rela.text.init
-                0x00000338        0x0 crt0.o
+                0x000003dc        0x0 crt0.o
 
-.rodata         0x00000338        0x0
-                0x00000338                        _rodata_start = .
+.rodata         0x000003dc        0x0
+                0x000003dc                        _rodata_start = .
  *(.rodata .rodata.*)
  *(.srodata .srodata.*)
-                0x00000338                        . = ALIGN (0x4)
-                0x00000338                        _rodata_end = .
+                0x000003dc                        . = ALIGN (0x4)
+                0x000003dc                        _rodata_end = .
 
-.data           0x00000338        0x0
-                0x00000338                        _data_start = .
+.data           0x000003dc        0x4
+                0x000003dc                        _data_start = .
  *(.data .data.*)
  *(.sdata .sdata.*)
-                0x00000338                        . = ALIGN (0x4)
-                0x00000338                        _data_end = .
+ .sdata         0x000003dc        0x4 main.o
+                0x000003e0                        . = ALIGN (0x4)
+                0x000003e0                        _data_end = .
 
-.bss            0x00000338        0x8
-                0x00000338                        _bss_start = .
+.bss            0x000003e0        0x8
+                0x000003e0                        _bss_start = .
  *(.bss .bss.*)
  *(.sbss .sbss.*)
- .sbss          0x00000338        0x8 main.o
+ .sbss          0x000003e0        0x8 main.o
  *(COMMON)
-                0x00000340                        . = ALIGN (0x4)
-                0x00000340                        _bss_end = .
-                0x00000340                        . = ALIGN (0x10)
-                0x00000340                        _heap_start = .
+                0x000003e8                        . = ALIGN (0x4)
+                0x000003e8                        _bss_end = .
+                0x000003f0                        . = ALIGN (0x10)
+                0x000003f0                        _heap_start = .
                 0x0000f000                        _heap_end = ((ORIGIN (RAM) + LENGTH (RAM)) - _stack_size)
                 0x0000f000                        _stack_bottom = ((ORIGIN (RAM) + LENGTH (RAM)) - _stack_size)
                 0x00010000                        _stack_top = (ORIGIN (RAM) + LENGTH (RAM))
@@ -79,16 +81,16 @@ LOAD main.o
  *(.riscv.attributes)
 OUTPUT(main.elf elf32-littleriscv)
 
-.debug_info     0x00000000      0x1a2
- .debug_info    0x00000000      0x1a2 main.o
+.debug_info     0x00000000      0x20b
+ .debug_info    0x00000000      0x20b main.o
 
-.debug_abbrev   0x00000000       0xe2
- .debug_abbrev  0x00000000       0xe2 main.o
+.debug_abbrev   0x00000000      0x10c
+ .debug_abbrev  0x00000000      0x10c main.o
 
 .debug_loclists
-                0x00000000      0x122
+                0x00000000      0x110
  .debug_loclists
-                0x00000000      0x122 main.o
+                0x00000000      0x110 main.o
 
 .debug_aranges  0x00000000       0x20
  .debug_aranges
@@ -99,12 +101,12 @@ OUTPUT(main.elf elf32-littleriscv)
  .debug_rnglists
                 0x00000000       0x17 main.o
 
-.debug_line     0x00000000      0x569
- .debug_line    0x00000000      0x569 main.o
+.debug_line     0x00000000      0x64d
+ .debug_line    0x00000000      0x64d main.o
 
-.debug_str      0x00000000       0xf9
- .debug_str     0x00000000       0xf9 main.o
-                                0x106 (size before relaxing)
+.debug_str      0x00000000      0x10a
+ .debug_str     0x00000000      0x10a main.o
+                                0x117 (size before relaxing)
 
 .debug_line_str
                 0x00000000        0xd
@@ -112,5 +114,5 @@ OUTPUT(main.elf elf32-littleriscv)
                 0x00000000        0xd main.o
                                  0x21 (size before relaxing)
 
-.debug_frame    0x00000000       0x3c
- .debug_frame   0x00000000       0x3c main.o
+.debug_frame    0x00000000       0x54
+ .debug_frame   0x00000000       0x54 main.o
