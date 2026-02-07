@@ -54,6 +54,13 @@ void delay(int d) {
   for (volatile unsigned int d = 0; d < (50 << d); d++)
     ;
 }
+// void dead() {
+//   for (int i = 0; i < 16; i++) {
+//     for (int k = 0; k < 16; k++) {
+//       desenha(i, k, COR_PRETO);
+//     }
+//   }
+// }
 void main(void) {
   unsigned char i;
   unsigned char direcao = DIR_DIR;
@@ -61,7 +68,7 @@ void main(void) {
   unsigned char tecla_anterior = 0; // guarda última tecla
   unsigned char rabo_x, rabo_y;
   unsigned char fruit_x, fruit_y;
-  int tamanho_atual = 2;
+  int tamanho_atual = 1;
   int d = 6;
   // Reset da tela (apenas na inicialização)
   REG_CLOCK = 0x00;
@@ -141,5 +148,8 @@ void main(void) {
     desenha(rabo_x, rabo_y, COR_PRETO);
     desenha(px[0], py[0], COR_VERDE);
     desenha(fruit_x, fruit_y, COR_VERMELHO);
+    // if (tamanho_atual == 4) {
+    //   dead();
+    // }
   }
 }
