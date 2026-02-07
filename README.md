@@ -36,7 +36,7 @@ Registradores MMIO usados pelo jogo (do código `work/main.c`):
 - REG_CLOCK (0x210): pulso para confirmar escrita (edge)
 - REG_INPUT (0x214): leitura de teclado (ascii/scan code)
 
-O display implementado espera coordenadas X/Y entre 0 e 15 (tela 16x16). As rotinas de desenho escrevem cor, X, Y, pulsam CLOCK para efetivar o pixel.
+O display implementado espera coordenadas X/Y entre 0 e 15 (tela 16x16). As funcoes de desenho escrevem cor, X, Y, pulsam CLOCK para efetivar o pixel.
 
 ---
 
@@ -188,3 +188,4 @@ docker compose run --rm riscv
 ./run.sh
 # saída: main.elf main.bin rom.txt main.dump main.map
 ```
+
