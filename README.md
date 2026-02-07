@@ -72,7 +72,7 @@ O script:
 
 ---
 
-## Compilar dentro do Docker
+## Compilar dentro do Docker (Recomendado)
 
 O repositório contém um `Dockerfile` que prepara uma imagem com a toolchain RISC‑V. Exemplo de uso:
 
@@ -153,30 +153,6 @@ A pasta `tests/` contém uma suíte de testes em C projetada para rodar em um n�
 
 - Compile o `tests/t3-c_test/test.c` com o mesmo script/linker (ajustar `main.c` por `test.c` ou adaptar o processo de build).
 - Carregue a ROM no simulador e verifique as regiões de memória reservadas para os resultados.
-
----
-
-## Troubleshooting / Dicas
-
-- "riscv-none-elf-gcc not found": instale a toolchain (xpack, riscv-gnu-toolchain, ou use o Dockerfile).
-- Se o jogo não aparece no Logisim:
-  - Verifique que `rom.txt` foi carregado corretamente.
-  - Certifique‑se de que PC inicial foi configurado para 0x00000000.
-  - Verifique se os sinais do periférico (CLOCK, RESET) estão conectados corretamente no design.
-- Se o binário for muito grande, o `linker.ld` contém ASSERTs que falharão: verifique espaço para BSS/heap/stack.
-- Para inspecionar o ELF: `riscv-none-elf-objdump -d main.elf` e `riscv-none-elf-size main.elf`.
-
----
-
-## Como portar para hardware real (FPGA, SoC)
-
-- O MMIO usado é simples (endereços fixos e writes por registrador). Garanta que:
-  - Cada acesso a REG_COR, REG_X, REG_Y, REG_CLOCK seja mapeado para registers do periférico no seu barramento.
-  - Considere sincronização/handshake se seu periférico for síncrono a outro clock.
-- O arquivo `rom.txt` contém o binário em palavras de 32 bits. Em uma FPGA, converta para o formato de memória ROM/BRAM esperado.
-- Se usar BRAM com endianidade diferente, cheque o `bin_to_rom.py` para adaptar ordem de bytes.
-- Para portar, verifique as restrições de alinhamento do linker (TEXTO em 0x0) e que sua BRAM/ROM esteja inicializada nesse endereço.
-
 ---
 
 ## Referências rápidas (comandos)
@@ -188,4 +164,5 @@ docker compose run --rm riscv
 ./run.sh
 # saída: main.elf main.bin rom.txt main.dump main.map
 ```
+
 
