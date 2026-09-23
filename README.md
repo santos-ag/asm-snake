@@ -1,6 +1,6 @@
 # Snake Game — RISC‑V RV32I
 
-Uma implementação do jogo da cobrinha (Snake) para a diciplina de arquitetura de computadores desenvolvida para rodar em um processador RISC‑V RV32I caseiro. O projeto contém o código em C + startup em assembly, script de link, utilitários para gerar ROM compatível com Logisim Evolution e uma suíte de testes para plataformas RV32I.
+Uma implementação do jogo da cobrinha (Snake) para a disciplina de arquitetura de computadores, desenvolvida para rodar em um processador RISC‑V RV32I caseiro. O projeto contém o código em C + startup em assembly, script de link, utilitários para gerar ROM compatível com Logisim Evolution e uma suíte de testes para plataformas RV32I.
 
 ---
 
@@ -29,14 +29,14 @@ Registradores MMIO usados pelo jogo (do código `work/main.c`):
 #define REG_INPUT (*(volatile unsigned char *)0x214)
 ```
 
-- REG_COR (0x200): cor da pixel/escrita (32 bits)
+- REG_COR (0x200): cor do pixel/escrita (32 bits)
 - REG_X  (0x204): coord X (8 bits)
 - REG_Y  (0x208): coord Y (8 bits)
 - REG_RESET (0x20C): sinal de reset do periférico (8 bits)
 - REG_CLOCK (0x210): pulso para confirmar escrita (edge)
 - REG_INPUT (0x214): leitura de teclado (ascii/scan code)
 
-O display implementado espera coordenadas X/Y entre 0 e 15 (tela 16x16). As funcoes de desenho escrevem cor, X, Y, pulsam CLOCK para efetivar o pixel.
+O display implementado espera coordenadas X/Y entre 0 e 15 (tela 16x16). As funções de desenho escrevem cor, X, Y, pulsam CLOCK para efetivar o pixel.
 
 ---
 
@@ -121,29 +121,32 @@ Detecção de tecla feita por leitura de `REG_INPUT` e detecção de alteração
 
 ## Mapa de memória e layout
 
-O linker script define RAM em 0x00000000 com 64KB (0x10000). O projeto também inclui uma suite de testes que documenta áreas usadas na RAM — veja `tests/t3-c_test/test.c` para um mapa detalhado de regiões utilizadas (resultados, debug, arrays, relatório). Exemplo (da suite de testes):
+O linker script define RAM em 0x00000000 com 64KB (0x10000). O projeto também inclui uma suíte de testes que documenta áreas usadas na RAM — veja `tests/t3-c_test/test.c` para um mapa detalhado de regiões utilizadas (resultados, debug, arrays, relatório). Exemplo (da suíte de testes):
 
 - 0x100 - 0x1FF: resultados dos testes
 - 0x200 - 0x2FF: dados de debug
 - 0x300 - 0x3FF: arrays de teste
 - 0x400 - 0x4FF: relatório final
 
-> Nota: Estes endereços são relativos ao uso da suite de testes; o jogo usa MMIO em 0x200+ e memória global para arrays de posição da cobrinha.
+> Nota: Estes endereços são relativos ao uso da suíte de testes; o jogo usa MMIO em 0x200+ e memória global para arrays de posição da cobrinha.
 
 ---
 
 ## Estrutura do projeto / arquivos importantes
 
-- work/
-  - main.c — código do jogo (desenho, lógica da cobrinha, RNG, I/O MMIO)
-  - crt0.S — startup assembly (inicializa SP, limpa BSS, chama main)
-  - linker.ld — script de linker (define ORIGIN = 0x00000000, RAM = 64KB)
-  - run.sh — script de build completo (compilação, link, objcopy, bin_to_rom)
-  - bin_to_rom.py — conversor de main.bin para `v2.0 raw` (Logisim)
-  - rom.txt — ROM gerada (exemplo)
-  - dssbly.sh — script para gerar disassembly com objdump
-- Dockerfile — container com toolchain RISC‑V
-- tests/ — suíte de testes RV32I (testes ALU, memória, branches, etc.)
+- `project.circ` — circuito do processador RISC-V RV32I e display no Logisim Evolution
+- `CU.ROM` — microcódigo/ROM da Unidade de Controle do processador
+- `docker-compose.yml` — orquestração de ambiente Docker para build reproduzível
+- `Dockerfile` — imagem com a toolchain RISC‑V pré-instalada
+- `work/`
+  - `main.c` — código do jogo (desenho, lógica da cobrinha, RNG, I/O MMIO)
+  - `crt0.S` — startup assembly (inicializa SP, limpa BSS, chama main)
+  - `linker.ld` — script de linker (define ORIGIN = 0x00000000, RAM = 64KB)
+  - `run.sh` — script de build completo (compilação, link, objcopy, bin_to_rom)
+  - `bin_to_rom.py` — conversor de main.bin para `v2.0 raw` (Logisim)
+  - `rom.txt` — ROM gerada (pronta para carregar no Logisim)
+  - `dssbly.sh` — script para gerar disassembly com objdump
+- `tests/` — suíte de testes RV32I (testes ALU, memória, branches, etc.)
 
 ---
 
@@ -157,12 +160,16 @@ A pasta `tests/` contém uma suíte de testes em C projetada para rodar em um n�
 
 ## Referências rápidas (comandos)
 
-Compilar (local):
+Compilar via Docker Compose (recomendado):
+```bash
+docker compose run --rm riscv ./run.sh
+# saída: main.elf, main.bin, rom.txt, main.dump, main.map
+```
+
+Compilar localmente no host (requer toolchain RISC-V no PATH):
 ```bash
 cd work
-docker compose run --rm riscv
 ./run.sh
-# saída: main.elf main.bin rom.txt main.dump main.map
 ```
 
 
