@@ -1,175 +1,97 @@
 # Snake Game — RISC‑V RV32I
 
-Uma implementação do jogo da cobrinha (Snake) para a disciplina de arquitetura de computadores, desenvolvida para rodar em um processador RISC‑V RV32I caseiro. O projeto contém o código em C + startup em assembly, script de link, utilitários para gerar ROM compatível com Logisim Evolution e uma suíte de testes para plataformas RV32I.
+Uma implementação do clássico jogo da cobrinha (Snake) desenvolvida para a disciplina de Arquitetura de Computadores, projetada para rodar em um processador RISC‑V RV32I dedicado implementado no Logisim Evolution. 
+
+O projeto contém o código do jogo em C com startup em Assembly RV32I, linker script, gerador de ROM e o circuito esquemático completo integrado a um display RGB 16x16 e entrada de teclado via MMIO.
 
 ---
 
-## Visão geral
+## Estrutura do Repositório
 
-O jogo é implementado em C, com um pequeno startup em RISC‑V assembly (crt0.S) e um script de link (work/linker.ld) que posiciona o .text em 0x00000000. A saída do processo de build é:
-
-- `main.elf` — ELF gerado
-- `main.bin` — "raw binary" extraído do ELF
-- `rom.txt` — ROM no formato "v2.0 raw" (palavras de 32 bits em hex) pronta para carregar no Logisim Evolution
-
-O jogo interage com o "hardware" (display simples e entrada) através de registradores MMIO mapeados em endereços fixos.
-
----
-
-## Arquitetura alvo (hardware / MMIO)
-
-Registradores MMIO usados pelo jogo (do código `work/main.c`):
-
-```c
-#define REG_COR (*(volatile unsigned int *)0x200)
-#define REG_X (*(volatile unsigned char *)0x204)
-#define REG_Y (*(volatile unsigned char *)0x208)
-#define REG_RESET (*(volatile unsigned char *)0x20C)
-#define REG_CLOCK (*(volatile unsigned char *)0x210)
-#define REG_INPUT (*(volatile unsigned char *)0x214)
-```
-
-- REG_COR (0x200): cor do pixel/escrita (32 bits)
-- REG_X  (0x204): coord X (8 bits)
-- REG_Y  (0x208): coord Y (8 bits)
-- REG_RESET (0x20C): sinal de reset do periférico (8 bits)
-- REG_CLOCK (0x210): pulso para confirmar escrita (edge)
-- REG_INPUT (0x214): leitura de teclado (ascii/scan code)
-
-O display implementado espera coordenadas X/Y entre 0 e 15 (tela 16x16). As funções de desenho escrevem cor, X, Y, pulsam CLOCK para efetivar o pixel.
+- `project.circ` — Circuito completo no Logisim Evolution (CPU RV32I + periféricos)
+- `CU.ROM` — Arquivo de microcódigo/ROM da Unidade de Controle (Control Unit)
+- `docker-compose.yml` — Configuração para build reproduzível em container
+- `Dockerfile` — Imagem com toolchain RISC-V GCC pré-configurada
+- `work/` — Código-fonte do jogo e scripts de compilação
+  - `main.c` — Lógica do jogo, controle de movimento, colisões, RNG e drivers MMIO
+  - `crt0.S` — Startup assembly (configuração de SP, limpeza do BSS e salto para main)
+  - `linker.ld` — Linker script que posiciona `.text` em `0x00000000` (RAM de 64KB)
+  - `run.sh` — Script automatizado de compilação, linkagem e conversão de ROM
+  - `bin_to_rom.py` — Utilitário de conversão de binário bruto para formato `v2.0 raw` do Logisim
+  - `dssbly.sh` — Script auxiliar para desmonte (disassembly) do ELF via `objdump`
+  - `rom.txt` — ROM pré-gerada pronta para execução
+- `tests/` — Suíte de testes para validação do núcleo RV32I
+  - `t0 - ram/` — Testes de barramento e leitura/escrita na RAM
+  - `t1-operation/` — Validação das operações lógicas e aritméticas da ALU
+  - `t2-branch/` — Testes de instruções de desvio condicional
+  - `t3-c_test/` — Programa de testes em C com checagens de memória e algoritmos
 
 ---
 
-## Requisitos
+## Arquitetura Alvo & Mapeamento MMIO
 
-- Toolchain RISC‑V: riscv-none-elf-gcc, riscv-none-elf-objcopy, riscv-none-elf-objdump, riscv-none-elf-size, riscv-none-elf-nm
-  - Ex.: xpack riscv-none-elf-gcc (a imagem Docker do repositório já baixa uma toolchain)
-- Python 3 (para bin_to_rom.py)
-- Logisim Evolution (ou outro simulador capaz de importar ROM no formato "v2.0 raw" com palavras de 32 bits)
-- Docker para build reproduzível
+O jogo interage com o hardware através de registradores MMIO (*Memory-Mapped I/O*) mapeados em endereços fixos:
 
----
+| Registrador | Endereço | Largura | Descrição |
+|---|---|---|---|
+| `REG_COR` | `0x200` | 32 bits | Cor do pixel em formato RGB (ex: `0x228B22` verde, `0xFF0000` vermelho) |
+| `REG_X` | `0x204` | 8 bits | Coordenada X na grade (0 a 15) |
+| `REG_Y` | `0x208` | 8 bits | Coordenada Y na grade (0 a 15) |
+| `REG_RESET` | `0x20C` | 8 bits | Pulso de reset do display |
+| `REG_CLOCK` | `0x210` | 8 bits | Pulso de clock (`0 -> 1 -> 0`) para efetivar a escrita do pixel |
+| `REG_INPUT` | `0x214` | 8 bits | Leitura da tecla pressionada no teclado (ASCII 7 bits) |
 
-## Compilar localmente (host)
-
-Este repositório já inclui um script para compilar tudo: `work/run.sh`. Exemplo (no diretório root do repositório):
-
-1. Certifique‑se de que `riscv-none-elf-gcc` está no PATH.
-2. Execute:
-
-```bash
-cd work
-./run.sh
-```
-
-O script:
-- compila `crt0.S` e `main.c`
-- linka usando `work/linker.ld`
-- gera `main.elf`, `main.bin`, `main.dump` (disassembly)
-- converte `main.bin` para `rom.txt` usando `work/bin_to_rom.py`
-
-(Se preferir, abra `work/run.sh` para ver flags e passos exatos.)
-
----
-
-## Compilar dentro do Docker (Recomendado)
-
-O repositório contém um `Dockerfile` que prepara uma imagem com a toolchain RISC‑V. Exemplo de uso:
-
-```bash
-# Construir a imagem (da raiz do repositório)
-docker build -t snake-rv32i .
-
-# Subir um container interativo com /work mapeado
-docker run --rm -it -v "$(pwd)/work:/work" snake-rv32i
-
-# Dentro do container:
-cd /work
-./run.sh
-```
-
-Isso garante que a versão da toolchain corresponda à usada para desenvolvimento.
-
----
-
-## Gerar ROM e carregar no Logisim
-
-Após o `./run.sh` você terá `work/rom.txt`. Instruções básicas no Logisim:
-
-1. No Logisim Evolution, crie/abra o design do seu processador.
-2. Adicione um componente ROM e carregue `work/rom.txt`.
-3. Configure o PC inicial em `0x00000000`.
-4. Execute (step/run) o processador.
-5. Observe o periférico de vídeo: ele deve desenhar a grade 16x16 com a cobrinha e a fruta.
-
-O arquivo `work/rom.txt` está no formato "v2.0 raw" (cada linha = 32 bits em hex), compatível com Logisim Evolution.
+O display matricial consiste em uma grade 16x16. A função `desenha(x, y, cor)` programa a cor, define as coordenadas X/Y e gera a borda de subida no registrador `REG_CLOCK` para atualizar o buffer de vídeo.
 
 ---
 
 ## Controles
 
-O jogo usa teclas WASD (maiúsculas ou minúsculas) lidas via `REG_INPUT`. Mapeamento no código:
+O jogo lê os caracteres ASCII diretamente via `REG_INPUT` com detecção de borda (*edge detection*) para evitar passos múltiplos por tecla pressionada:
 
-- W / w → cima
-- S / s → baixo
-- A / a → esquerda
-- D / d → direita
-
-Detecção de tecla feita por leitura de `REG_INPUT` e detecção de alteração (edge detection — só processa quando muda e não é zero) para evitar múltiplos passos por leitura.
+- `W` / `w` → Cima
+- `S` / `s` → Baixo
+- `A` / `a` → Esquerda
+- `D` / `d` → Direita
 
 ---
 
-## Mapa de memória e layout
+## Compilação e Build
 
-O linker script define RAM em 0x00000000 com 64KB (0x10000). O projeto também inclui uma suíte de testes que documenta áreas usadas na RAM — veja `tests/t3-c_test/test.c` para um mapa detalhado de regiões utilizadas (resultados, debug, arrays, relatório). Exemplo (da suíte de testes):
+### Opção 1: Via Docker (Recomendado)
 
-- 0x100 - 0x1FF: resultados dos testes
-- 0x200 - 0x2FF: dados de debug
-- 0x300 - 0x3FF: arrays de teste
-- 0x400 - 0x4FF: relatório final
+Não requer a instalação manual da toolchain RISC-V no computador hospedeiro:
 
-> Nota: Estes endereços são relativos ao uso da suíte de testes; o jogo usa MMIO em 0x200+ e memória global para arrays de posição da cobrinha.
-
----
-
-## Estrutura do projeto / arquivos importantes
-
-- `project.circ` — circuito do processador RISC-V RV32I e display no Logisim Evolution
-- `CU.ROM` — microcódigo/ROM da Unidade de Controle do processador
-- `docker-compose.yml` — orquestração de ambiente Docker para build reproduzível
-- `Dockerfile` — imagem com a toolchain RISC‑V pré-instalada
-- `work/`
-  - `main.c` — código do jogo (desenho, lógica da cobrinha, RNG, I/O MMIO)
-  - `crt0.S` — startup assembly (inicializa SP, limpa BSS, chama main)
-  - `linker.ld` — script de linker (define ORIGIN = 0x00000000, RAM = 64KB)
-  - `run.sh` — script de build completo (compilação, link, objcopy, bin_to_rom)
-  - `bin_to_rom.py` — conversor de main.bin para `v2.0 raw` (Logisim)
-  - `rom.txt` — ROM gerada (pronta para carregar no Logisim)
-  - `dssbly.sh` — script para gerar disassembly com objdump
-- `tests/` — suíte de testes RV32I (testes ALU, memória, branches, etc.)
-
----
-
-## Testes
-
-A pasta `tests/` contém uma suíte de testes em C projetada para rodar em um núcleo RV32I. Ela verifica operações ALU, memória, branches, chamadas de função e algoritmos (ex.: Fibonacci). Para usar/reusar os testes:
-
-- Compile o `tests/t3-c_test/test.c` com o mesmo script/linker (ajustar `main.c` por `test.c` ou adaptar o processo de build).
-- Carregue a ROM no simulador e verifique as regiões de memória reservadas para os resultados.
----
-
-## Referências rápidas (comandos)
-
-Compilar via Docker Compose (recomendado):
 ```bash
+# Executa o build dentro do container Docker
 docker compose run --rm riscv ./run.sh
-# saída: main.elf, main.bin, rom.txt, main.dump, main.map
 ```
 
-Compilar localmente no host (requer toolchain RISC-V no PATH):
+Os artefatos compilados (`main.elf`, `main.bin`, `rom.txt`, `main.dump` e `main.map`) serão gerados dentro da pasta `work/`.
+
+### Opção 2: Localmente no Host
+
+Requer `riscv-none-elf-gcc` e `python3` configurados no seu `PATH`:
+
 ```bash
 cd work
 ./run.sh
 ```
 
+---
 
+## Como Executar no Logisim Evolution
+
+1. Abra o **Logisim Evolution**.
+2. Abra o arquivo `project.circ` na raiz deste repositório.
+3. No painel lateral, localize o subcircuito **`InstMem`**.
+4. Clique com o botão direito sobre o componente **ROM de Instruções** e selecione **Load Image...** (ou *Carregar Imagem*).
+5. Selecione o arquivo compilado `work/rom.txt`.
+6. Volte para o circuito principal **`main`**.
+7. Inicie a simulação:
+   - Ative o clock do simulador: menu **Simulate → Ticks Enabled** (ou pressione `Ctrl + K`).
+   - Ajuste a frequência do clock em **Simulate → Tick Frequency** (recomenda-se entre 64 Hz e 512 Hz conforme a velocidade desejada).
+8. Para controlar a cobrinha:
+   - Clique na ferramenta de interação (*Hand Tool* / mãozinha no Logisim).
+   - Clique sobre o componente de **Keyboard** para dar foco.
+   - Use as teclas **W, A, S, D** para guiar a cobra pela tela.
